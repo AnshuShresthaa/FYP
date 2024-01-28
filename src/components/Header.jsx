@@ -10,7 +10,7 @@ const Header = () => {
 
   return (
     <section>
-      <header className="container max-auto px-5 py-4 md:px-10">
+      <header className="container max-auto px-5 py-4 md:px-10 relative">
         <div className="flex justify-between items-center">
           <div>
             <img src={images.Logo} alt="logo" />
@@ -21,7 +21,6 @@ const Header = () => {
               className="focus:outline-none md:hidden"
               onClick={() => setShowDropdown(!showDropdown)}
             >
-          
             </button>
             <ul
               className={`${
@@ -40,7 +39,6 @@ const Header = () => {
                   onClick={() => setShowDropdown(!showDropdown)}
                 >
                   Blog
-                  {/* Your Arrow Icon */}
                 </button>
                 {showDropdown && (
                   <div className="absolute z-10 top-full left-0 w-40 mt-1 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
@@ -60,7 +58,6 @@ const Header = () => {
                   Journal
                 </a>
               </li>
-              {/* Other Navbar items */}
             </ul>
           </div>
           <div>
@@ -69,6 +66,7 @@ const Header = () => {
             </button>
           </div>
         </div>
+        <div className="absolute bottom-0 left-0 w-full h-0.5 bg-black"></div>
       </header>
     </section>
   );
