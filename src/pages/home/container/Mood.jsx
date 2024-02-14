@@ -16,13 +16,16 @@ const Mood = () => {
       <div className="text-black text-7xl font-bold self-center mt-32 max-md:max-w-full max-md:text-4xl max-md:mt-10 text-center">
         How are you feeling today?
       </div>
-      <div className="mt-8"> 
+      <div className="mt-8 text-3xl"> 
         {moods.map((mood, index) => (
           <div
             key={index}
-            className={`text-white font-bold justify-center ml-11 mr-9 px-11 py-12 items-start max-md:text-5xl max-w-full max-md:mr-2.5 max-md:px-5 cursor-pointer ${
-              activeMood === mood.label ? `bg-opacity-${mood.opacity}` : ''
-            }`}
+            className={`
+              text-white font-bold justify-center ml-11 mr-9 px-11 py-12 items-start 
+              max-md:text-5xl max-w-full max-md:mr-2.5 max-md:px-5 cursor-pointer 
+              transition-transform duration-300 transform hover:-translate-y-1
+              ${activeMood === mood.label ? `bg-opacity-${mood.opacity}` : ''}
+            `}
             onClick={() => setActiveMood(activeMood === mood.label ? null : mood.label)}
             style={{ backgroundColor: `rgba(51, 128, 140, 0.${mood.opacity})` }}
           >

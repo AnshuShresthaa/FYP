@@ -13,7 +13,7 @@ const Header = () => {
       <header className="container max-auto px-5 py-4 md:px-10 relative">
         <div className="flex justify-between items-center">
           <div>
-            <img src={images.Logo} alt="logo" />
+          <img src={images.Logo} alt="logo" style={{ width: '150px', height: 'auto' }} />
           </div>
           <div className="flex gap-x-3 items-center">
             <button
@@ -54,16 +54,16 @@ const Header = () => {
                 </a>
               </li>
               <li>
-                <a href="/" className="px-4 transition duration-300 ease-in-out hover:text-blue-500">
+                <a href="/Journal" className="px-4 transition duration-300 ease-in-out hover:text-blue-500">
                   Journal
                 </a>
               </li>
             </ul>
           </div>
           <div>
-            <button className="border-2 border-blue-500 px-6 py-2 rounded-full text-blue-500 font-semibold hover:bg-blue-500 hover:text-white hover:border-blue-500 transition duration-300 ease-in-out">
+            <a href="/register" className="border-2 border-blue-500 px-6 py-2 rounded-full text-blue-500 font-semibold hover:bg-blue-500 hover:text-white hover:border-blue-500 transition duration-300 ease-in-out">
               Sign in
-            </button>
+            </a>
           </div>
         </div>
         <div className="absolute bottom-0 left-0 w-full h-0.5 bg-black"></div>
