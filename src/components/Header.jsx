@@ -49,7 +49,7 @@ const Header = () => {
                 )}
               </li>
               <li>
-                <a href="/" className="px-4 transition duration-300 ease-in-out hover:text-blue-500">
+                <a href="/MoodTracker" className="px-4 transition duration-300 ease-in-out hover:text-blue-500">
                   Mood Tracker
                 </a>
               </li>

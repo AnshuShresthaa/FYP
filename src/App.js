@@ -6,6 +6,8 @@ import LoginPage from "./pages/login/LoginPage";
 import RegisterPage from './pages/register/RegisterPage';
 import HomePage from "./pages/home/HomePage";
 import Journal from "./pages/Journal/Journal";
+import MoodTracker from "./pages/MoodTracker/DailyHeatMap";
+import DailyHeatmap from "./pages/MoodTracker/DailyHeatMap";
 
 function App() {
   return (
@@ -16,6 +18,7 @@ function App() {
         <Route path='/register' element={<RegisterPage />}></Route>
         <Route path='/' element={<HomePage />} />
         <Route path='/Journal' element={<Journal />} />
+        <Route path='/DailyHeatMap' element={<DailyHeatmap />} />
       </Routes>
     </div>
     </Router>
