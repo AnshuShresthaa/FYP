@@ -1,21 +1,14 @@
 import dayjs from "dayjs";
 import React, { useState } from "react";
-import { generateDate, months } from "../../utils/Calendar"; 
-import cn from "../../utils/cn"; 
+import { generateDate, months } from "../../utils/Calendar";
+import cn from "../../utils/cn";
 import { GrFormNext, GrFormPrevious } from 'react-icons/gr';
 import MainLayout from '../../components/MainLayout';
 
 const Journal = () => {
-  const [entry, setEntry] = useState({
-    content: '',
-    tags: '',
-  });
-
+  const [entry, setEntry] = useState({ content: '', tags: '' });
   const [wordCount, setWordCount] = useState(0);
-
   const [selectDate, setSelectDate] = useState(dayjs());
-
-  
 
   const handleEntryChange = (field, value) => {
     setEntry({ ...entry, [field]: value });
@@ -26,23 +19,19 @@ const Journal = () => {
   };
 
   const handleAddEntry = () => {
-    // Handle logic for adding the entry
     console.log("Entry added:", entry);
-    // You can reset the entry fields if needed
     setEntry({ content: '', tags: '' });
-    // Reset word count
     setWordCount(0);
   };
 
-  const Calendar = ( {onDateClick}) => {
+  const Calendar = ({ onDateClick }) => {
     const days = ["S", "M", "T", "W", "T", "F", "S"];
     const currentDate = dayjs();
     const [today, setToday] = useState(currentDate);
-    const [selectDate, setSelectDate] = useState(currentDate);
 
     return (
-      <div className="flex gap-4 sm:divide-x justify-center sm:w-1/3 h-screen items-center sm:flex-row flex-col"> {/* Adjusted width to 1/3 */} 
-      <div className="w-96 h-96"> {/* Adjusted width and height */}
+      <div className="flex gap-4 sm:divide-x justify-center sm:w-1/3 h-screen items-center sm:flex-row flex-col">
+        <div className="w-96 h-96">
           <div className="flex justify-between items-center">
             <h1 className="select-none font-semibold">
               {months[today.month()]}, {today.year()}
@@ -50,27 +39,21 @@ const Journal = () => {
             <div className="flex gap-4 items-center">
               <GrFormPrevious
                 className="w-5 h-5 cursor-pointer hover:scale-105 transition-all"
-                onClick={() => {
-                  setToday(today.subtract(1, 'month'));
-                }}
+                onClick={() => setToday(today.subtract(1, 'month'))}
               />
               <h1
-                className=" cursor-pointer hover:scale-105 transition-all"
-                onClick={() => {
-                  setToday(currentDate);
-                }}
+                className="cursor-pointer hover:scale-105 transition-all"
+                onClick={() => setToday(currentDate)}
               >
                 Today
               </h1>
               <GrFormNext
                 className="w-5 h-5 cursor-pointer hover:scale-105 transition-all"
-                onClick={() => {
-                  setToday(today.add(1, 'month'));
-                }}
+                onClick={() => setToday(today.add(1, 'month'))}
               />
             </div>
           </div>
-          <div className="grid grid-cols-7 ">
+          <div className="grid grid-cols-7">
             {days.map((day, index) => (
               <h1
                 key={index}
@@ -80,8 +63,7 @@ const Journal = () => {
               </h1>
             ))}
           </div>
-
-          <div className=" grid grid-cols-7 ">
+          <div className="grid grid-cols-7">
             {generateDate(today.month(), today.year()).map(({ date, currentMonth, today }, index) => (
               <div
                 key={index}
@@ -91,16 +73,12 @@ const Journal = () => {
                   className={cn(
                     currentMonth ? "" : "text-gray-400",
                     today ? "bg-red-600 text-white" : "",
-                    selectDate
-                      .toDate()
-                      .toDateString() === date.toDate().toDateString()
+                    selectDate.toDate().toDateString() === date.toDate().toDateString()
                       ? "bg-black text-white"
                       : "",
                     "h-10 w-10 rounded-full grid place-content-center hover:bg-black hover:text-white transition-all cursor-pointer select-none"
                   )}
-                  onClick={() => {
-                    onDateClick(date);
-                  }}
+                  onClick={() => onDateClick(date)}
                 >
                   {date.date()}
                 </h1>
@@ -117,15 +95,13 @@ const Journal = () => {
       <div className="flex gap-4 items-start py-8 pr- pl-2 bg-neutral-200 max-md:pr-2 max-md:flex-row">
         <Calendar onDateClick={setSelectDate} />
         <div className="flex flex-col w-6/12 max-md:ml-0 max-md:w-full">
-        <input
-          type="text"
-          value={entry.content}
-          onChange={(e) => handleEntryChange('content', e.target.value)}
-          className="px-4 py-2 mt-2 text-xl text-black bg-white rounded-2xl border border-black border-solid tracking-[2.4px] w-[342px] max-md:px-2 max-md:mt-4 max-md:w-[342px] placeholder-font-style"
-          placeholder="Search"
-        />
-
-
+          <input
+            type="text"
+            value={entry.content}
+            onChange={(e) => handleEntryChange('content', e.target.value)}
+            className="px-4 py-2 mt-2 text-xl text-black bg-white rounded-2xl border border-black border-solid tracking-[2.4px] w-[342px] max-md:px-2 max-md:mt-4 max-md:w-[342px] placeholder-font-style"
+            placeholder="Search"
+          />
           <div className="flex gap-2 justify-between items-start mt-4 ml-2 max-w-full text-3xl font-bold text-black w-[390px] max-md:flex-wrap max-md:mt-4 max-md:text-2xl">
             <div className="flex-auto self-end mt-2 max-md:text-2xl">
               {selectDate.format("MMMM YYYY")}
@@ -151,7 +127,6 @@ const Journal = () => {
               {wordCount}/500
             </div>
           </div>
-          
           <button
             className="px-4 py-2 mt-4 text-2xl text-white bg-green-600 rounded-md max-md:mt-2"
             aria-label="Add"

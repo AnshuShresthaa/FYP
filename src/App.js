@@ -6,22 +6,19 @@ import LoginPage from "./pages/login/LoginPage";
 import RegisterPage from './pages/register/RegisterPage';
 import HomePage from "./pages/home/HomePage";
 import Journal from "./pages/Journal/Journal";
-import MoodTracker from "./pages/MoodTracker/DailyHeatMap";
-import DailyHeatmap from "./pages/MoodTracker/DailyHeatMap";
+import BlogPage from "./pages/Blog/BlogPage";
 
 function App() {
   return (
-    <Router>
     <div className="App font-opensans">
       <Routes>
         <Route path="/login" element={<LoginPage />} />
-        <Route path='/register' element={<RegisterPage />}></Route>
+        <Route path='/register' element={<RegisterPage />} />
         <Route path='/' element={<HomePage />} />
         <Route path='/Journal' element={<Journal />} />
-        <Route path='/DailyHeatMap' element={<DailyHeatmap />} />
+        <Route path='/Blog' element={<BlogPage />} />
       </Routes>
     </div>
-    </Router>
   );
 }
 

@@ -4,6 +4,7 @@ import Hero from './container/Hero';
 import Mood from './container/Mood';
 import Articles from './container/Articles';
 import Question from './container/Question';
+import CTA from "./container/CTA";
 
 const HomePage = () => {
   return (
@@ -12,6 +13,7 @@ const HomePage = () => {
     <Mood />
     <Articles />
     <Question />
+    <CTA />
   </MainLayout>
   );
 };
