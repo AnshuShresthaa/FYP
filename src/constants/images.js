@@ -5,6 +5,8 @@ import SignUpImage from '../assets/SignUp.png';
 import MindArcImage from '../assets/MindArc.png';
 import GoogleImage from '../assets/Google.png';
 import AppleImage from '../assets/Apple.png';
+import Blog1Image from  '../assets/Blog1.png';
+import PostProfileImage from '../assets/PostProfile.png';
 
 const images = {
     Logo,
@@ -14,6 +16,8 @@ const images = {
     MindArcImage,
     GoogleImage,
     AppleImage,
+    Blog1Image,
+    PostProfileImage,
 };
 
 export default images;
