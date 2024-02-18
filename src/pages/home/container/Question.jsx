@@ -6,7 +6,7 @@ const QuestionItem = ({ question, onClick, isActive, details }) => (
   }" 
   onClick={onClick}
   >
-    <div className="text-white text-4xl font-bold grow my-auto max-md:max-w-full">
+    <div className="text-white text-3xl font-bold grow my-auto max-md:max-w-full">
       {question}
       {isActive && <div className="mt-2 text-sm max-md:text-base">{details}</div>}
     </div>

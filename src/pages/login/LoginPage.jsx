@@ -24,15 +24,25 @@ const LoginPage = () => {
     <MainLayout showHeader={false}>
       <form className="flex flex-col justify-center items-center px-4 py-4 bg-white max-md:px-2">
         <header className="flex gap-2 items-stretch mt-12 w-full max-w-[900px] max-md:flex-wrap max-md:mt-6 max-md:max-w-full">
-          <div className="flex flex-col items-center w-4/5 max-md:w-full">
+          {/* Image on the side for larger devices */}
+          <div className="md:w-1/2 hidden md:block pr-8">
             <img
               src={images.MindArcImage}
-              className="object-contain object-center mt-3 w-full ml-[-80%]"
+              className="object-contain object-center w-full"
               alt="Logo"
             />
           </div>
 
-          <div className='w-full max-w-md mx-auto p-6'>
+          <div className='w-full max-w-md mx-auto p-6 md:w-1/2'>
+            {/* For smaller devices, align the image in the center */}
+            <div className="md:hidden flex items-center justify-center mb-8">
+              <img
+                src={images.MindArcImage}
+                className="object-contain object-center w-full"
+                alt="Logo"
+              />
+            </div>
+
             <h1 className='font-roboto text-3xl text-center text-dark-hard mb-8'>
               Welcome Back to <span className="font-bold">MindArc!</span>
             </h1>

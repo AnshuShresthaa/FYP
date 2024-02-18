@@ -29,18 +29,6 @@ const RegisterPage = () => {
     <MainLayout showHeader={false}>
       <section className="flex flex-col justify-center items-center px-4 py-4 bg-white max-md:px-2">
         <header className="flex gap-2 items-stretch mt-12 w-full max-w-[900px] max-md:flex-wrap max-md:mt-6 max-md:max-w-full">
-          <div className="flex flex-col items-center w-1/2 max-md:w-full">
-            {/* Use the background image as a background */}
-            <div
-              style={{
-                backgroundImage: `url(${images.SignUpImage})`,
-                backgroundSize: 'cover',
-                backgroundPosition: 'center',
-                height: '100%', // Make sure it takes half of the height
-                width: '100%',  // Take half of the width
-              }}
-            />
-          </div>
           <div className='w-full max-w-md mx-auto p-6'>
             <h1 className='font-roboto text-2xl font-bold text-center text-dark-hard mb-8'>Welcome to MindArc</h1>
             <form onSubmit={handleSubmit} className='flex flex-col gap-4'>
