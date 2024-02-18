@@ -17,7 +17,7 @@ const NavItem = ({ item }) => {
     <li className="relative group">
       {item.type === "link" ? (
         <>
-          <a href={item.url} className="px-4 py-2">
+          <a href={item.url} className="px-4 py-2 transition-colors duration-300 hover:text-blue-500">
             {item.name}
           </a>
           <span className="text-blue-500 absolute transition-all duration-500 font-bold right-0 top-0 group-hover:right-[90%] opacity-0 group-hover:opacity-100">
@@ -25,16 +25,17 @@ const NavItem = ({ item }) => {
         </>
       ) : (
         <>
-          <a href="/" className="px-4 py-2 flex gap-x-1 items-center">
+          <a href="/" className="px-4 py-2 flex gap-x-1 items-center transition-colors duration-300 hover:text-blue-500">
             <span>{item.name}</span>
             <MdKeyboardArrowDown />
           </a>
           <div className="hidden transition-all duration-500 pt-4 absolute bottom-0 right-0 transform translate-y-full group-hover:block w-max">
             <ul className="flex flex-col shadow-lg rounded-lg overflow-hidden">
-              {item.items.map((page) => (
+              {item.items.map((page, index) => (
                 <a
+                  key={index}
                   href="/"
-                  className="hover:bg-dark-hard hover:text-white px-4 py-2 text-white lg:text-dark-soft"
+                  className="hover:text-blue-500 px-4 py-2 text-white lg:text-dark-soft"
                 >
                   {page}
                 </a>
@@ -46,6 +47,7 @@ const NavItem = ({ item }) => {
     </li>
   );
 };
+
 
 const Header = () => {
   const navigate = useNavigate();
