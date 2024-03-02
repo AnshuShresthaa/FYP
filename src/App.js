@@ -18,7 +18,7 @@ function App() {
         <Route path='/register' element={<RegisterPage />} />
         <Route path='/' element={<HomePage />} />
         <Route path='/Journal' element={<Journal />} />
-        <Route path='/Blog' element={<BlogPage />} />
+        <Route path='/Blog/:slug' element={<BlogPage />} />
         <Route path='/profile' element={<ProfilePage />} />
       </Routes>
       <Toaster />
