@@ -13,7 +13,7 @@ const Mood = () => {
 
   return (
     <div>
-      <div className="text-black text-6xl font-bold self-center mt-32 max-md:max-w-full max-md:text-4xl max-md:mt-10 text-center">
+      <div className="text-black text-5xl font-bold self-center mt-32 max-md:max-w-full max-md:text-4xl max-md:mt-10 text-center">
         How are you feeling today?
       </div>
       <div className="mt-8 text-3xl mx-4 md:mx-11"> 

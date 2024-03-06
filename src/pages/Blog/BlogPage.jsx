@@ -15,53 +15,18 @@ import parse from "html-react-parser";
 import SuggestedPosts from './container/SuggestedPosts';
 import CommentsContainer from '../../components/comments/CommentsContainer';
 import { useQuery } from '@tanstack/react-query';
-import { getSinglePost } from '../../services/index/posts';
+import { getAllPosts, getSinglePost } from '../../services/index/posts';
 import ArticleDetailSkeleton from './components/ArticleDetailSkeleton';
 import ErrorMessage from '../../components/ErrorMessage';
 import { useSelector } from 'react-redux';
 
 
-const postsData = [
-    {
-        _id: "1",
-        image: images.Blog1Image,
-        title: "Depression",
-        createdAt: "2023-01-28T15:35:53.607+0000"
-    },
-    {
-        _id: "2",
-        image: images.Blog1Image,
-        title: "Depression",
-        createdAt: "2023-01-28T15:35:53.607+0000"
-    },
-    {
-        _id: "3",
-        image: images.Blog1Image,
-        title: "Depression",
-        createdAt: "2023-01-28T15:35:53.607+0000"
-    },
-    {
-        _id: "4",
-        image: images.Blog1Image,
-        title: "Depression",
-        createdAt: "2023-01-28T15:35:53.607+0000"
-    },
-];
-
-const tagsData = [
-  "Depression", 
-  "Anxiety", 
-  "OCD",
-  "Anger", 
-  "Panic Attack",
-  "ADHD", 
-];
-
 const BlogPage = () => {
   const { slug } = useParams();
-  const userState = useSelector((state => state.user))
+  const userState = useSelector((state) => state.user);
   const [breadCrumbsData, setbreadCrumbsData] = useState([]);
-  const [body, setBody] = useState(null)
+  const [body, setBody] = useState(null);
+
   const { data, isLoading, isError } = useQuery({
     queryFn: () => getSinglePost({ slug }),
     queryKey: ['blog', slug],
@@ -76,6 +41,11 @@ const BlogPage = () => {
           generateHTML(data?.body, [Bold, Italic, Text, Paragraph, Document]))
       );
     },
+  });
+
+  const { data: postsData } = useQuery({
+    queryFn: () => getAllPosts(),
+    queryKey: ['posts'],
   });
 
   return (
@@ -120,7 +90,7 @@ const BlogPage = () => {
             <SuggestedPosts
               header="Latest Posts"
               posts={postsData}
-              tags={tagsData}
+              tags={data?.tags}
               className="lg:mt-0"
             />
          </div>
