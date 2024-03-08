@@ -1,52 +1,48 @@
-import React from 'react';
+import React from "react";
 import { FaArrowRight } from "react-icons/fa";
-
-import ArticleCard from '../../../components/ArticleCard';
-import { useQuery } from '@tanstack/react-query';
-import { getAllPosts } from '../../../services/index/posts';
-import toast from 'react-hot-toast';
-import ArticleCardSkeleton from '../../../components/ArticleCardSkeleton';
-import ErrorMessage from '../../../components/ErrorMessage';
-
+import ArticleCard from "../../../components/ArticleCard";
+import { useQuery } from "@tanstack/react-query";
+import { getAllPosts } from "../../../services/index/posts";
+import { toast } from "react-hot-toast";
+import ArticleCardSkeleton from "../../../components/ArticleCardSkeleton";
+import ErrorMessage from "../../../components/ErrorMessage";
 
 const Articles = () => {
-const { data, isLoading, isError } = useQuery({
-  queryFn: () => getAllPosts(),
-  queryKey: ["posts"],
-  throwOnError: (error) => {
-    toast.error(error.message);
-    console.log(error);
-  },
-});
-
+  const { data, isLoading, isError } = useQuery({
+    queryFn: () => getAllPosts(),
+    queryKey: ["posts"],
+    onError: (error) => {
+      toast.error(error.message);
+      console.log(error);
+    },
+  });
   return (
-    <section className='container mx-auto mt-8 p-4'>
+    <section className='container mx-auto mt-24 p-4'>
       <div className="text-center mb-8">
         <h2 className="text-3xl font-bold mb-4">Make Your Mental Health a Priority</h2>
         <p className="text-black text-lg lg:text-xl">
           The most important findings from the latest research, all in one place.
         </p>
       </div>
-      <div className='flex flex-wrap justify-center gap-y-8'>
+      <div className=" flex flex-wrap md:gap-x-5 gap-y-5 pb-10">
         {isLoading ? (
           [...Array(3)].map((item, index) => (
-            <ArticleCardSkeleton 
-              key={index} 
-              className="w-full md:w-[calc(33.33%-32px)] lg:w-[calc(25%-32px)] mb-8 mr-4" 
+            <ArticleCardSkeleton
+              key={index}
+              className="w-full md:w-[calc(50%-20px)] lg:w-[calc(33.33%-21px)]"
             />
           ))
         ) : isError ? (
           <ErrorMessage message="Couldn't fetch the posts data" />
-        ) :  (
-        data.map((post) => (
-          <ArticleCard 
-            key= {post._id} 
-            post={post}
-            className='w-full md:w-[calc(33.33%-32px)] lg:w-[calc(25%-32px)] mb-8 mr-4' 
-          />
-        ))
-      )} 
-        
+        ) : (
+          data?.data.map((post) => (
+            <ArticleCard
+              key={post._id}
+              post={post}
+              className="w-full md:w-[calc(50%-20px)] lg:w-[calc(33.33%-21px)]"
+            />
+          ))
+        )}
       </div>
       <button className="mx-auto flex items-center gap-x-2 font-bold text-primary border-2 border-primary px-6 py-3 rounded-lg">
         <span>More articles</span>
@@ -55,5 +51,4 @@ const { data, isLoading, isError } = useQuery({
     </section>
   );
 };
-
 export default Articles;

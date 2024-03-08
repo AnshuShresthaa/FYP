@@ -89,7 +89,7 @@ const BlogPage = () => {
           <div>
             <SuggestedPosts
               header="Latest Posts"
-              posts={postsData}
+              posts={postsData?.data}
               tags={data?.tags}
               className="lg:mt-0"
             />

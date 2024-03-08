@@ -80,7 +80,7 @@ const ProfilePage = () => {
         <div className="w-full max-w-sm mx-auto">
           <ProfilePicture avatar={profileData?.avatar} />
           <form onSubmit={handleSubmit(submitHandler)}>
-            <div className="flex flex-col mb-6 w-full">
+            <div className="flex flex-col mb-6 mt-8 w-full">
               <label
                 htmlFor="name"
                 className="text-[#5a7184] font-semibold block"
