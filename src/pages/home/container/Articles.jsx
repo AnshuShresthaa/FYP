@@ -17,7 +17,7 @@ const Articles = () => {
     },
   });
   return (
-    <section className='container mx-auto mt-24 p-4'>
+    <section className='container mx-auto mt-16 p-4'>
       <div className="text-center mb-8">
         <h2 className="text-3xl font-bold mb-4">Make Your Mental Health a Priority</h2>
         <p className="text-black text-lg lg:text-xl">
