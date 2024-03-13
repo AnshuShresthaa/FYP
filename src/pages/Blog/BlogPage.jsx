@@ -3,14 +3,6 @@ import BreadCrumbs from "../../components/BreadCrumbs";
 import MainLayout from '../../components/MainLayout';
 import { images,stables } from "../../constants";
 import { Link, useParams } from 'react-router-dom';
-import { generateHTML } from '@tiptap/react';
-import Bold from "@tiptap/extension-bold";
-import Document from "@tiptap/extension-document";
-import Paragraph from "@tiptap/extension-paragraph";
-import Text from "@tiptap/extension-text";
-import Italic from "@tiptap/extension-italic";
-import parse from "html-react-parser";
-
 
 import SuggestedPosts from './container/SuggestedPosts';
 import CommentsContainer from '../../components/comments/CommentsContainer';
@@ -19,6 +11,7 @@ import { getAllPosts, getSinglePost } from '../../services/index/posts';
 import ArticleDetailSkeleton from './components/ArticleDetailSkeleton';
 import ErrorMessage from '../../components/ErrorMessage';
 import { useSelector } from 'react-redux';
+import parseJsonToHtml from '../../utils/parseJsonToHtml';
 
 
 const BlogPage = () => {
@@ -36,10 +29,7 @@ const BlogPage = () => {
           { name: "BlogPage", link: "/Blog" },
           { name: "Blog title", link: `/blog/${slug}` },
       ]);
-      setBody( 
-        parse(
-          generateHTML(data?.body, [Bold, Italic, Text, Paragraph, Document]))
-      );
+      setBody(parseJsonToHtml(data?.body));
     },
   });
 
