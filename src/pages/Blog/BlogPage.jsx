@@ -3,7 +3,6 @@ import BreadCrumbs from "../../components/BreadCrumbs";
 import MainLayout from '../../components/MainLayout';
 import { images,stables } from "../../constants";
 import { Link, useParams } from 'react-router-dom';
-
 import SuggestedPosts from './container/SuggestedPosts';
 import CommentsContainer from '../../components/comments/CommentsContainer';
 import { useQuery } from '@tanstack/react-query';
@@ -12,6 +11,7 @@ import ArticleDetailSkeleton from './components/ArticleDetailSkeleton';
 import ErrorMessage from '../../components/ErrorMessage';
 import { useSelector } from 'react-redux';
 import parseJsonToHtml from '../../utils/parseJsonToHtml';
+import Editor from '../../components/editor/Editor';
 
 
 const BlogPage = () => {
@@ -50,7 +50,11 @@ const BlogPage = () => {
             <BreadCrumbs data={breadCrumbsData} />
             <img
               className='rounded-xl w-full lg:w-full lg:h-auto'
-              src={data?.photo ? stables.UPLOAD_FOLDER_BASED_URL + data?.photo : images.Blog1Image}
+              src={
+                data?.photo 
+                ? stables.UPLOAD_FOLDER_BASE_URL + data?.photo 
+                : images.Blog1Image
+              }
               alt={data?.title}
             />
             <div className='mt-4 flex gap-2'>
@@ -66,9 +70,14 @@ const BlogPage = () => {
             <h1 className='text-3xl lg:text-4xl font-medium font-roboto mt-4 text-dark-hard'>
               {data?.title}
             </h1>
-            <div className='mt-4 prose prose-sm:prose-base'>
-              {body}
-            </div>
+            <div className="w-full">
+              {!isLoading && !isError && (
+                <Editor
+                  content={data?.body}
+                  editable={false} 
+                />
+              )}
+            </div> 
             <CommentsContainer 
               comments={data?.comments}
               className="mt-10" 
