@@ -13,9 +13,9 @@ import { useSelector } from "react-redux";
 import { createPost } from "../../../../services/index/posts";
 
 const Header = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const userState = useSelector((state) => state.user);
-  const queryClient = useQueryClient()
+  const queryClient = useQueryClient();
   const [isMenuActive, setIsMenuActive] = useState(false);
   const [activeNavName, setActiveNavName] = useState("dashboard");
   const windowSize = useWindowSize();
@@ -30,7 +30,7 @@ const Header = () => {
       onSuccess: (data) => {
         queryClient.invalidateQueries(["posts"]);
         toast.success("Post is created, edit that now!");
-        navigate(`/admin/posts/manage/edit/${data.slug}`)
+        navigate(`/admin/posts/manage/edit/${data.slug}`);
       },
       onError: (error) => {
         toast.error(error.message);
@@ -51,8 +51,8 @@ const Header = () => {
   }, [windowSize.width]);
 
   const handleCreateNewPost = ({ token }) => {
-    mutateCreatePost({ token })
-  }
+    mutateCreatePost({ token });
+  };
 
   return (
     <header className="flex h-fit w-full items-center justify-between p-4 lg:h-full lg:max-w-[300px] lg:flex-col lg:items-start lg:justify-start lg:p-0">
@@ -111,7 +111,7 @@ const Header = () => {
               >
                 <Link to="/admin/posts/manage">Manage all posts</Link>
                 <button
-                  style={{ marginTop: '1rem' }} 
+                  style={{ marginTop: '1rem', marginBottom: '1rem' }} 
                   disabled={isLoadingCreatePost} 
                   className="text-start disabled:opacity-60 disabled:cursor-not-allowed" 
                   onClick={() => handleCreateNewPost({ 
@@ -120,6 +120,7 @@ const Header = () => {
                   >
                     Add New Post
                   </button>
+                  <Link to="/admin/categories/manage">Categories</Link>
             </NavItemCollapse>
             
           </div>
