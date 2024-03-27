@@ -17,14 +17,14 @@ const Articles = () => {
     },
   });
   return (
-    <section className='container mx-auto mt-16 p-4'>
+    <section className='container mx-auto mt-16 p-4 md:px-16'>
       <div className="text-center mb-8">
         <h2 className="text-3xl font-bold mb-4">Make Your Mental Health a Priority</h2>
         <p className="text-black text-lg lg:text-xl">
           The most important findings from the latest research, all in one place.
         </p>
       </div>
-      <div className=" flex flex-wrap md:gap-x-5 gap-y-5 pb-10">
+      <div className="flex flex-wrap md:gap-x-5 gap-y-5 pb-10">
         {isLoading ? (
           [...Array(3)].map((item, index) => (
             <ArticleCardSkeleton
@@ -51,4 +51,5 @@ const Articles = () => {
     </section>
   );
 };
+
 export default Articles;
