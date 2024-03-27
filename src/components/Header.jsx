@@ -4,13 +4,12 @@ import { MdKeyboardArrowDown } from "react-icons/md";
 import { Link, useNavigate } from "react-router-dom";
 import { UseSelector, useDispatch, useSelector } from "react-redux";
 
-
 import { images } from "../constants";
 import { logout } from "../store/actions/user";
 
 const navItemsInfo = [
   { name: "Home", type: "link", url: "/" },
-  { name: "Blog", type: "link", url: "/Blog" },
+  { name: "Blog", type: "link", url: "/allBlog" },
   { name: "Mood Tracker", type: "link", url: "/MoodTracker" },
   { name: "Journal", type: "link", url: "/Journal" },
 ];

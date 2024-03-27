@@ -1,8 +1,8 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import React, { useState } from "react";
-import CreatableSelect from 'react-select/creatable';
+import CreatableSelect from "react-select/creatable";
 import { getSinglePost, updatePost } from "../../../../services/index/posts";
-import { Link, useNavigate, useParams,  } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import ArticleDetailSkeleton from '../../../Blog/components/ArticleDetailSkeleton';
 import ErrorMessage from "../../../../components/ErrorMessage";
 import { stables } from "../../../../constants";
@@ -12,14 +12,15 @@ import { useSelector } from "react-redux";
 import Editor from "../../../../components/editor/Editor";
 import MultiSelectTagDropdown from "../../components/select-dropdown/MultiSelectTagDropdown";
 import { getAllCategories } from "../../../../services/index/postCategories";
-import { categoryToOption, filterCategories } from "../../../../utils/multiSelectTagUtils";
-
+import {
+  categoryToOption,
+  filterCategories,
+} from "../../../../utils/multiSelectTagUtils";
 
 const promiseOptions = async (inputValue) => {
   const { data: categoriesData } = await getAllCategories();
   return filterCategories(inputValue, categoriesData);
-}; 
-
+};
 
 const EditPost = () => {
   const { slug } = useParams();
@@ -46,7 +47,6 @@ const EditPost = () => {
     },
     refetchOnWindowFocus: false,
   });
-
 
   const {
     mutate: mutateUpdatePostDetail,
@@ -94,7 +94,10 @@ const EditPost = () => {
       updatedData.append("postPicture", picture);
     }
 
-    updatedData.append("document", JSON.stringify({ body, categories, title, tags, slug: postSlug, caption }));
+    updatedData.append(
+      "document",
+      JSON.stringify({ body, categories, title, tags, slug: postSlug, caption })
+    );
 
     mutateUpdatePostDetail({
       updatedData,
@@ -164,17 +167,15 @@ const EditPost = () => {
               ))}
             </div>
             <div className="d-form-control w-full">
-              <label className="d-label" htmlFor="Blog Title">
-                <span className="d-label-text">
-                  Blog Title
-                </span>
+              <label className="d-label" htmlFor="title">
+                <span className="d-label-text">Title</span>
               </label>
-              <input 
-                id="Blog Title"
+              <input
+                id="title"
                 value={title}
-                className="d-input d-input bordered bordered-slate-300 !outline-slate-300 text-xl font-medium font-roboto text-dark-hard"
+                className="d-input d-input-bordered border-slate-300 !outline-slate-300 text-xl font-medium font-roboto text-dark-hard"
                 onChange={(e) => setTitle(e.target.value)}
-                placeholder="Blog Title..."
+                placeholder="title"
               />
             </div>
             <div className="d-form-control w-full">
@@ -204,10 +205,8 @@ const EditPost = () => {
               />
             </div>
             <div className="mb-5 mt-2">
-            <label className="d-label">
-                <span className="d-label-text">
-                  Categories
-                </span>
+              <label className="d-label">
+                <span className="d-label-text">categories</span>
               </label>
               {isPostDataLoaded && (
                 <MultiSelectTagDropdown
@@ -241,7 +240,7 @@ const EditPost = () => {
               {isPostDataLoaded && (
                 <Editor
                   content={data?.body}
-                  editable={true} 
+                  editable={true}
                   onDataChange={(data) => {
                     setBody(data);
                   }}
@@ -264,3 +263,5 @@ const EditPost = () => {
 };
 
 export default EditPost;
+
+

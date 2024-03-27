@@ -6,10 +6,12 @@ import { getAllPosts } from "../../../services/index/posts";
 import { toast } from "react-hot-toast";
 import ArticleCardSkeleton from "../../../components/ArticleCardSkeleton";
 import ErrorMessage from "../../../components/ErrorMessage";
+import { Link } from "react-router-dom";
+import { Button } from "antd";
 
 const Articles = () => {
   const { data, isLoading, isError } = useQuery({
-    queryFn: () => getAllPosts(),
+    queryFn: () => getAllPosts("", 1, 6),
     queryKey: ["posts"],
     onError: (error) => {
       toast.error(error.message);
@@ -44,10 +46,13 @@ const Articles = () => {
           ))
         )}
       </div>
-      <button className="mx-auto flex items-center gap-x-2 font-bold text-primary border-2 border-primary px-6 py-3 rounded-lg">
-        <span>More articles</span>
+      <Link
+        to="/allBlog"
+        className="flex items-center justify-center font-bold text-primary border-2 border-primary px-6 py-3 rounded-lg max-w-sm mx-auto"
+        >
+        <span className="mr-2">More articles</span>
         <FaArrowRight className="w-3 h-3" />
-      </button>
+      </Link>
     </section>
   );
 };

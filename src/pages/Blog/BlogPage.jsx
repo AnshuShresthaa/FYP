@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import BreadCrumbs from "../../components/BreadCrumbs";
 import MainLayout from '../../components/MainLayout';
 import { images,stables } from "../../constants";
@@ -37,6 +37,10 @@ const BlogPage = () => {
     queryFn: () => getAllPosts(),
     queryKey: ['posts'],
   });
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   return (
     <MainLayout>
