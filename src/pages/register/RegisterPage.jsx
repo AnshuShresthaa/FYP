@@ -5,7 +5,6 @@ import { useMutation } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 
-import MainLayout from "../../components/MainLayout";
 import { signup } from "../../services/index/users";
 import { userActions } from "../../store/reducers/userReducers";
 
@@ -57,12 +56,31 @@ const RegisterPage = () => {
   const password = watch("password");
 
   return (
-    <MainLayout>
-      <section className="container mx-auto px-5 py-10">
-        <div className="w-full max-w-sm mx-auto">
-          <h1 className="font-roboto text-2xl font-bold text-center text-dark-hard mb-8">
-            Sign Up
-          </h1>
+  <section className="container mx-auto px-5 py-5">
+  <div className="grid grid-cols-1 md:grid-cols-2 gap-8 justify-center">
+    <div className="flex flex-col justify-center items-center md:items-start md:text-left ml-40">
+      <h1 className="font-roboto text-3xl font-bold text-center md:text-left text-dark-hard mb-8">
+        Unlock Inner Peace with MindArc!
+      </h1>
+      <p className="text-lg text-dark-hard mb-6 mt-2 md:mt-0 md:space-y-4 md:text-md">
+        Immerse yourself in a comprehensive wellness experience <br/> designed to enhance your well-being.
+      </p>
+      <ul className="text-sm mt-2 md:mt-5 space-y-4 md:text-base text-center md:text-left">
+        <li>
+          ✓ Discover blogs, journal prompts, and mood tracking.
+        </li>
+        <li>
+          ✓ Empower mind, body, and soul with holistic support.
+        </li>
+        <li>
+          ✓  Join MindArc, elevate life with intention.
+        </li>
+      </ul>
+    </div>
+    <div className="w-full max-w-md border border-gray-300 rounded-lg p-6 mt-5">
+      <h1 className="font-roboto text-2xl font-bold text-center text-dark-hard mb-8">
+        Start Exploring, Join now!
+      </h1>
           <form onSubmit={handleSubmit(submitHandler)}>
             <div className="flex flex-col mb-6 w-full">
               <label
@@ -205,8 +223,8 @@ const RegisterPage = () => {
             </p>
           </form>
         </div>
+        </div>
       </section>
-    </MainLayout>
   );
 };
 

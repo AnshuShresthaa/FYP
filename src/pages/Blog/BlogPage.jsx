@@ -49,8 +49,8 @@ const BlogPage = () => {
       ): isError ? ( 
         <ErrorMessage message="Couldnt fetch the post details" /> 
       ) : (
-        <section className='container mx-auto max-w-5xl grid lg:grid-cols-2 gap-8 items-start'>
-          <article>
+        <section className='container mx-auto max-w-5xl grid lg:grid-cols-3 gap-8 items-start'>
+          <article className="lg:col-span-2"> 
             <BreadCrumbs data={breadCrumbsData} />
             <img
               className='rounded-xl w-full lg:w-full lg:h-auto'

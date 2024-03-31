@@ -6,7 +6,7 @@ import { GrFormNext, GrFormPrevious } from 'react-icons/gr';
 import MainLayout from '../../components/MainLayout';
 
 const Journal = () => {
-  const [entry, setEntry] = useState({ content: '', tags: '' });
+  const [entry, setEntry] = useState({ title: '', content: '', tags: '' });
   const [wordCount, setWordCount] = useState(0);
   const [selectDate, setSelectDate] = useState(dayjs());
 
@@ -20,7 +20,7 @@ const Journal = () => {
 
   const handleAddEntry = () => {
     console.log("Entry added:", entry);
-    setEntry({ content: '', tags: '' });
+    setEntry({ title: '', content: '', tags: '' });
     setWordCount(0);
   };
 
@@ -92,15 +92,22 @@ const Journal = () => {
 
   return (
     <MainLayout>
-      <div className="flex gap-4 items-start py-8 pr- pl-2 bg-neutral-200 max-md:pr-2 max-md:flex-row">
+      <div className="flex gap-4 items-start py-8 pr- pl-2 max-md:pr-2 max-md:flex-row">
         <Calendar onDateClick={setSelectDate} />
         <div className="flex flex-col w-6/12 max-md:ml-0 max-md:w-full">
           <input
             type="text"
+            value={entry.title}
+            onChange={(e) => handleEntryChange('title', e.target.value)}
+            className="px-4 py-2 mt-2 text-xl text-black bg-white rounded-2xl border border-black border-solid tracking-[2.4px] w-[342px] max-md:px-2 max-md:mt-4 max-md:w-[342px] placeholder-font-style"
+            placeholder="Title"
+          />
+          <textarea
             value={entry.content}
             onChange={(e) => handleEntryChange('content', e.target.value)}
-            className="px-4 py-2 mt-2 text-xl text-black bg-white rounded-2xl border border-black border-solid tracking-[2.4px] w-[342px] max-md:px-2 max-md:mt-4 max-md:w-[342px] placeholder-font-style"
-            placeholder="Search"
+            className="px-4 py-2 mt-4 text-lg text-black bg-white rounded-2xl border border-black border-solid tracking-[2.4px] w-[342px] max-md:px-2 max-md:mt-2 max-md:w-[342px] placeholder-font-style resize-none"
+            placeholder="Write something...."
+            rows="6"
           />
           <div className="flex gap-2 justify-between items-start mt-4 ml-2 max-w-full text-3xl font-bold text-black w-[390px] max-md:flex-wrap max-md:mt-4 max-md:text-2xl">
             <div className="flex-auto self-end mt-2 max-md:text-2xl">
@@ -113,14 +120,14 @@ const Journal = () => {
                 {selectDate.format("dddd, MMMM D, YYYY")}
               </div>
               <div className="mt-2 font-bold max-md:max-w-full max-md:text-2xl">
-                Add a title
+                Add tags
               </div>
               <input
                 type="text"
                 value={entry.tags}
                 onChange={(e) => handleEntryChange('tags', e.target.value)}
                 className="mt-2 px-4 py-2 max-md:py-1 text-2xl text-black bg-white rounded-md border border-black border-solid max-md:w-full"
-                placeholder="Write something...."
+                placeholder="Tags"
               />
             </div>
             <div className="justify-center items-end py-5 pr-8 pl-6 text-2xl text-black whitespace-nowrap bg-zinc-300 mt-[313px] max-md:pr-4 max-md:pl-2 max-md:mt-4 max-md:max-w-full">
