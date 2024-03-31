@@ -19,7 +19,7 @@ const Search = ({ className, onSearchKeyword }) => {
         <input
           className="placeholder:font-bold font-semibold text-dark-soft placeholder:text-[#959EAD] rounded-lg pl-12 pr-3 w-full py-3 focus:outline-none shadow-[rgba(13,_38,_76,_0.19)_0px_9px_20px] md:py-4"
           type="text"
-          placeholder="Search article"
+          placeholder="Search..."
           value={searchKeyword}
           onChange={(e) => setSearchKeyword(e.target.value)}
         />

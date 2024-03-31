@@ -65,6 +65,7 @@ const EditPost = () => {
       navigate(`/admin/posts/manage/edit/${data.slug}`, { replace: true });
     },
     onError: (error) => {
+
       toast.error(error.message);
       console.log(error);
     },

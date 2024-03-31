@@ -1,27 +1,111 @@
 import dayjs from "dayjs";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { generateDate, months } from "../../utils/Calendar";
 import cn from "../../utils/cn";
 import { GrFormNext, GrFormPrevious } from 'react-icons/gr';
 import MainLayout from '../../components/MainLayout';
+import { createPost, getAllJournalEntries, updateJournalEntry, deleteJournalEntry } from "../../services/index/journal"; 
+import { useSelector } from "react-redux"; 
+import Search from "../../components/Search";
 
 const Journal = () => {
   const [entry, setEntry] = useState({ title: '', content: '', tags: '' });
   const [wordCount, setWordCount] = useState(0);
   const [selectDate, setSelectDate] = useState(dayjs());
+  const [journalEntries, setJournalEntries] = useState([]);
+  const [editingEntry, setEditingEntry] = useState(null);
+  const [filteredEntries, setFilteredEntries] = useState([]); // State for filtered entries
+  
+  const userState = useSelector((state) => state.user);
+
+  useEffect(() => {
+    const fetchJournalEntries = async () => {
+      try {
+        const data = await getAllJournalEntries(userState.userInfo.token);
+        setJournalEntries(data);
+        setFilteredEntries(data); // Initialize filtered entries with all journal entries
+      } catch (error) {
+        console.error("Error fetching journal entries:", error);
+      }
+    };
+
+    fetchJournalEntries();
+  }, [userState.userInfo.token]);
+
+  // Function to handle search keyword
+  const handleSearchKeyword = ({ searchKeyword }) => {
+    const filtered = journalEntries.filter(entry => 
+      entry.title.toLowerCase().includes(searchKeyword.toLowerCase()) ||
+      entry.content.toLowerCase().includes(searchKeyword.toLowerCase())
+    );
+    setFilteredEntries(filtered);
+  };
 
   const handleEntryChange = (field, value) => {
     setEntry({ ...entry, [field]: value });
 
-    // Calculate word count
     const words = value.trim().split(/\s+/);
     setWordCount(words.length);
   };
 
-  const handleAddEntry = () => {
-    console.log("Entry added:", entry);
-    setEntry({ title: '', content: '', tags: '' });
-    setWordCount(0);
+  const handleAddEntry = async () => {
+    try {
+      await createPost({
+        token: userState.userInfo.token,
+        title: entry.title,
+        content: entry.content,
+        tags: entry.tags,
+      });
+
+      console.log("Entry added:", entry);
+      setEntry({ title: '', content: '', tags: '' });
+      setWordCount(0);
+    } catch (error) {
+      console.error("Error adding entry:", error);
+    }
+  };
+
+  const handleEdit = (entry) => {
+    setEditingEntry(entry);
+    setEntry({ title: entry.title, content: entry.content, tags: entry.tags });
+  };
+
+  const handleDelete = async (id) => {
+    try {
+      if (window.confirm("Do you want to delete your Post?")) {
+        await deleteJournalEntry({ token: userState.userInfo.token, id });
+        // Remove the deleted entry from the UI
+        setJournalEntries(prevEntries => prevEntries.filter(entry => entry._id !== id));
+      }
+    } catch (error) {
+      console.error("Error deleting entry:", error);
+    }
+  };
+
+  const handleUpdateEntry = async () => {
+    try {
+      const updatedEntry = await updateJournalEntry({
+        token: userState.userInfo.token,
+        id: editingEntry._id,
+        title: entry.title,
+        content: entry.content,
+        tags: entry.tags,
+      });
+
+      // Update the entry in the UI
+      setJournalEntries(prevEntries =>
+        prevEntries.map(prevEntry =>
+          prevEntry._id === updatedEntry._id ? updatedEntry : prevEntry
+        )
+      );
+
+      // Reset the editing state and form fields
+      setEditingEntry(null);
+      setEntry({ title: '', content: '', tags: '' });
+      setWordCount(0);
+    } catch (error) {
+      console.error("Error updating entry:", error);
+    }
   };
 
   const Calendar = ({ onDateClick }) => {
@@ -95,52 +179,73 @@ const Journal = () => {
       <div className="flex gap-4 items-start py-8 pr- pl-2 max-md:pr-2 max-md:flex-row">
         <Calendar onDateClick={setSelectDate} />
         <div className="flex flex-col w-6/12 max-md:ml-0 max-md:w-full">
-          <input
-            type="text"
-            value={entry.title}
-            onChange={(e) => handleEntryChange('title', e.target.value)}
-            className="px-4 py-2 mt-2 text-xl text-black bg-white rounded-2xl border border-black border-solid tracking-[2.4px] w-[342px] max-md:px-2 max-md:mt-4 max-md:w-[342px] placeholder-font-style"
-            placeholder="Title"
-          />
-          <textarea
-            value={entry.content}
-            onChange={(e) => handleEntryChange('content', e.target.value)}
-            className="px-4 py-2 mt-4 text-lg text-black bg-white rounded-2xl border border-black border-solid tracking-[2.4px] w-[342px] max-md:px-2 max-md:mt-2 max-md:w-[342px] placeholder-font-style resize-none"
-            placeholder="Write something...."
-            rows="6"
-          />
-          <div className="flex gap-2 justify-between items-start mt-4 ml-2 max-w-full text-3xl font-bold text-black w-[390px] max-md:flex-wrap max-md:mt-4 max-md:text-2xl">
-            <div className="flex-auto self-end mt-2 max-md:text-2xl">
-              {selectDate.format("MMMM YYYY")}
+          {/* Add the Search component */}
+          <Search className="mb-4" onSearchKeyword={handleSearchKeyword} />
+          {/* Form for adding new entry or editing existing entry */}
+          <div className="border rounded-lg p-6">
+            <div className="text-xl font-semibold mb-4">
+              {selectDate.format("dddd, MMMM D, YYYY")}
             </div>
-          </div>
-          <div className="flex flex-col grow pt-6 w-full bg-white max-md:mt-4 max-md:max-w-full">
-            <div className="flex flex-col self-start mt-4 ml-4 text-3xl text-zinc-500 max-md:mt-4 max-md:max-w-full max-md:text-2xl">
-              <div className="text-2xl max-md:max-w-full">
-                {selectDate.format("dddd, MMMM D, YYYY")}
-              </div>
-              <div className="mt-2 font-bold max-md:max-w-full max-md:text-2xl">
-                Add tags
-              </div>
+            <input
+              type="text"
+              value={entry.title}
+              onChange={(e) => handleEntryChange('title', e.target.value)}
+              className="px-4 py-2 text-xl text-black bg-white placeholder-font-style mb-4 outline-none"
+              placeholder="Title"
+            />
+            <textarea
+              value={entry.content}
+              onChange={(e) => handleEntryChange('content', e.target.value)}
+              className="px-4 py-2 text-lg text-black bg-white rounded-2xl placeholder-font-style resize-none mb-4 outline-none"
+              placeholder="Write something...."
+              rows="6"
+            />
+            <div>
               <input
                 type="text"
                 value={entry.tags}
                 onChange={(e) => handleEntryChange('tags', e.target.value)}
-                className="mt-2 px-4 py-2 max-md:py-1 text-2xl text-black bg-white rounded-md border border-black border-solid max-md:w-full"
+                className="px-4 py-2 text-xl text-black bg-white mr-2 placeholder-font-style outline-none"
                 placeholder="Tags"
               />
             </div>
-            <div className="justify-center items-end py-5 pr-8 pl-6 text-2xl text-black whitespace-nowrap bg-zinc-300 mt-[313px] max-md:pr-4 max-md:pl-2 max-md:mt-4 max-md:max-w-full">
-              {wordCount}/500
+            <div className="flex justify-between items-center mb-4">
+              <span className="text-xl font-semibold text-gray-600">Word Count: {wordCount}/500</span>
+              <button
+                className="px-4 py-2 text-2xl text-white bg-green-600 rounded-md outline-none"
+                aria-label="Submit"
+                onClick={editingEntry ? handleUpdateEntry : handleAddEntry}
+              >
+                {editingEntry ? 'Update' : 'Add'}
+              </button>
             </div>
           </div>
-          <button
-            className="px-4 py-2 mt-4 text-2xl text-white bg-green-600 rounded-md max-md:mt-2"
-            aria-label="Add"
-            onClick={handleAddEntry}
-          >
-            Add
-          </button>
+          {/* Display existing journal entries */}
+          <div className="mt-8">
+            <h2 className="text-2xl font-semibold mb-2">All Journal Entries</h2>
+            {filteredEntries.map((entry) => (
+              <div key={entry._id} className="border p-4 rounded-md mb-4">
+                <p><strong>Title:</strong> {entry.title}</p>
+                <p><strong>Content:</strong> {entry.content}</p>
+                <p><strong>Tags:</strong> {entry.tags}</p>
+                <p><strong>Date:</strong> {dayjs(entry.date).format("MMMM D, YYYY")} </p>
+                <div className="mt-2 flex justify-end">
+                  <button
+                    className="px-3 py-1 bg-blue-500 text-white rounded-md mr-2"
+                    onClick={() => handleEdit(entry)}
+                  >
+                    Edit
+                  </button>
+                  <button
+                    className="px-3 py-1 bg-red-500 text-white rounded-md"
+                    onClick={() => handleDelete(entry._id)}
+                  >
+                    Delete
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </MainLayout>
