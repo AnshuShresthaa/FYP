@@ -66,15 +66,22 @@ const CommentsContainer = ({
   });
 
   const addCommentHandler = (value, parent = null, replyOnUser = null) => {
+    // Check if the user is logged in
+    if (!userState.userInfo) {
+        toast.error("Please login to add a comment");
+        return;
+    }
+
+    // If user is logged in, proceed with adding the comment
     mutateNewComment({
-      desc: value,
-      parent,
-      replyOnUser,
-      token: userState.userInfo.token,
-      slug: postSlug,
+        desc: value,
+        parent,
+        replyOnUser,
+        token: userState.userInfo.token,
+        slug: postSlug,
     });
     setAffectedComment(null);
-  };
+};
 
   const updateCommentHandler = (value, commentId) => {
     mutateUpdateComment({

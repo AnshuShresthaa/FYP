@@ -11,17 +11,16 @@ import { userActions } from "../../store/reducers/userReducers";
 
 import { images } from '../../constants';
 
-
 const LoginPage = () => {
-  const navigate  = useNavigate();
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const userState = useSelector(state => state.user)
 
   const { mutate, isLoading } = useMutation({
-    mutationFn: ({email, password}) => {
-      return login({email, password});
+    mutationFn: ({ email, password }) => {
+      return login({ email, password });
     },
-    onSuccess:(data) => {
+    onSuccess: (data) => {
       dispatch(userActions.setUserInfo(data));
       localStorage.setItem('account', JSON.stringify(data));
     },
@@ -50,8 +49,8 @@ const LoginPage = () => {
   });
 
   const submitHandler = (data) => {
-    const {email, password} = data;
-    mutate({email, password});
+    const { email, password } = data;
+    mutate({ email, password });
   };
 
   return (
@@ -62,7 +61,7 @@ const LoginPage = () => {
           <img src={images.MindArcImage} alt="Login" className="w-full h-full object-cover" />
         </div>
       </div>
-      
+
       {/* Right side with login form */}
       <div className="w-full md:w-1/2 max-w-md mx-auto md:ml-2">
         <h1 className="font-roboto text-2xl font-bold text-center text-dark-hard mb-8">
@@ -91,8 +90,8 @@ const LoginPage = () => {
                 },
               })}
               placeholder="Enter email"
-              className={`placeholder:text-[#959ead] text-dark-hard mt-3 rounded-lg px-5 py-4 font-semibold block outline-none border ${
-                errors.email ? "border-red-500" : "border-[#c3cad9]"
+              className={`placeholder:text-[#959ead] text-dark-hard mt-3 rounded-lg px-5 py-4 font-semibold block outline-none border border-[#c3cad9] focus:border-primary ${
+                errors.email ? "border-red-500" : ""
               }`}
             />
             {errors.email?.message && (
@@ -122,8 +121,8 @@ const LoginPage = () => {
                 },
               })}
               placeholder="Enter password"
-              className={`placeholder:text-[#959ead] text-dark-hard mt-3 rounded-lg px-5 py-4 font-semibold block outline-none border ${
-                errors.password ? "border-red-500" : "border-[#c3cad9]"
+              className={`placeholder:text-[#959ead] text-dark-hard mt-3 rounded-lg px-5 py-4 font-semibold block outline-none border border-[#c3cad9] focus:border-primary ${
+                errors.password ? "border-red-500" : ""
               }`}
             />
             {errors.password?.message && (

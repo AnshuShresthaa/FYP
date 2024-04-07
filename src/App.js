@@ -18,6 +18,7 @@ import Categories from "./pages/admin/screens/categories/Categories";
 import EditCategories from "./pages/admin/screens/categories/EditCategories";
 import Users from "./pages/admin/screens/users/Users";
 import BlogListPage from "./pages/allBlog/BlogListPage";
+import MoodTracker from "./pages/MoodTracker/MoodTracker";
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
         <Route path='/register' element={<RegisterPage />} />
         <Route path='/' element={<HomePage />} />
         <Route path='/Journal' element={<Journal />} />
+        <Route path='/MoodTracker' element={<MoodTracker />} />
         <Route path='/allBlog' element={<BlogListPage />} />
         <Route path='/Blog/:slug' element={<BlogPage />} />
         <Route path='/profile' element={<ProfilePage />} />

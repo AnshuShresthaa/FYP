@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
@@ -55,32 +55,37 @@ const RegisterPage = () => {
 
   const password = watch("password");
 
+  const [isNameFocused, setNameFocused] = useState(false);
+  const [isEmailFocused, setEmailFocused] = useState(false);
+  const [isPasswordFocused, setPasswordFocused] = useState(false);
+  const [isConfirmPasswordFocused, setConfirmPasswordFocused] = useState(false);
+
   return (
-  <section className="container mx-auto px-5 py-5">
-  <div className="grid grid-cols-1 md:grid-cols-2 gap-8 justify-center">
-    <div className="flex flex-col justify-center items-center md:items-start md:text-left ml-40">
-      <h1 className="font-roboto text-3xl font-bold text-center md:text-left text-dark-hard mb-8">
-        Unlock Inner Peace with MindArc!
-      </h1>
-      <p className="text-lg text-dark-hard mb-6 mt-2 md:mt-0 md:space-y-4 md:text-md">
-        Immerse yourself in a comprehensive wellness experience <br/> designed to enhance your well-being.
-      </p>
-      <ul className="text-sm mt-2 md:mt-5 space-y-4 md:text-base text-center md:text-left">
-        <li>
-          ✓ Discover blogs, journal prompts, and mood tracking.
-        </li>
-        <li>
-          ✓ Empower mind, body, and soul with holistic support.
-        </li>
-        <li>
-          ✓  Join MindArc, elevate life with intention.
-        </li>
-      </ul>
-    </div>
-    <div className="w-full max-w-md border border-gray-300 rounded-lg p-6 mt-5">
-      <h1 className="font-roboto text-2xl font-bold text-center text-dark-hard mb-8">
-        Start Exploring, Join now!
-      </h1>
+    <section className="container mx-auto px-5 py-5">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 justify-center">
+        <div className="flex flex-col justify-center items-center md:items-start md:text-left ml-40">
+          <h1 className="font-roboto text-3xl font-bold text-center md:text-left text-dark-hard mb-8">
+            Unlock Inner Peace with MindArc!
+          </h1>
+          <p className="text-lg text-dark-hard mb-6 mt-2 md:mt-0 md:space-y-4 md:text-md">
+            Immerse yourself in a comprehensive wellness experience <br/> designed to enhance your well-being.
+          </p>
+          <ul className="text-sm mt-2 md:mt-5 space-y-4 md:text-base text-center md:text-left">
+            <li>
+              ✓ Discover blogs, journal prompts, and mood tracking.
+            </li>
+            <li>
+              ✓ Empower mind, body, and soul with holistic support.
+            </li>
+            <li>
+              ✓  Join MindArc, elevate life with intention.
+            </li>
+          </ul>
+        </div>
+        <div className="w-full max-w-md border border-gray-300 rounded-lg p-6 mt-5">
+          <h1 className="font-roboto text-2xl font-bold text-center text-dark-hard mb-8">
+            Start Exploring, Join now!
+          </h1>
           <form onSubmit={handleSubmit(submitHandler)}>
             <div className="flex flex-col mb-6 w-full">
               <label
@@ -104,8 +109,10 @@ const RegisterPage = () => {
                 })}
                 placeholder="Enter name"
                 className={`placeholder:text-[#959ead] text-dark-hard mt-3 rounded-lg px-5 py-4 font-semibold block outline-none border ${
-                  errors.name ? "border-red-500" : "border-[#c3cad9]"
+                  errors.name ? "border-red-500" : (isNameFocused ? "border-blue-500" : "border-[#c3cad9]")
                 }`}
+                onFocus={() => setNameFocused(true)}
+                onBlur={() => setNameFocused(false)}
               />
               {errors.name?.message && (
                 <p className="text-red-500 text-xs mt-1">
@@ -136,8 +143,10 @@ const RegisterPage = () => {
                 })}
                 placeholder="Enter email"
                 className={`placeholder:text-[#959ead] text-dark-hard mt-3 rounded-lg px-5 py-4 font-semibold block outline-none border ${
-                  errors.email ? "border-red-500" : "border-[#c3cad9]"
+                  errors.email ? "border-red-500" : (isEmailFocused ? "border-blue-500" : "border-[#c3cad9]")
                 }`}
+                onFocus={() => setEmailFocused(true)}
+                onBlur={() => setEmailFocused(false)}
               />
               {errors.email?.message && (
                 <p className="text-red-500 text-xs mt-1">
@@ -167,8 +176,10 @@ const RegisterPage = () => {
                 })}
                 placeholder="Enter password"
                 className={`placeholder:text-[#959ead] text-dark-hard mt-3 rounded-lg px-5 py-4 font-semibold block outline-none border ${
-                  errors.password ? "border-red-500" : "border-[#c3cad9]"
+                  errors.password ? "border-red-500" : (isPasswordFocused ? "border-blue-500" : "border-[#c3cad9]")
                 }`}
+                onFocus={() => setPasswordFocused(true)}
+                onBlur={() => setPasswordFocused(false)}
               />
               {errors.password?.message && (
                 <p className="text-red-500 text-xs mt-1">
@@ -199,8 +210,10 @@ const RegisterPage = () => {
                 })}
                 placeholder="Enter confirm password"
                 className={`placeholder:text-[#959ead] text-dark-hard mt-3 rounded-lg px-5 py-4 font-semibold block outline-none border ${
-                  errors.confirmPassword ? "border-red-500" : "border-[#c3cad9]"
+                  errors.confirmPassword ? "border-red-500" : (isConfirmPasswordFocused ? "border-blue-500" : "border-[#c3cad9]")
                 }`}
+                onFocus={() => setConfirmPasswordFocused(true)}
+                onBlur={() => setConfirmPasswordFocused(false)}
               />
               {errors.confirmPassword?.message && (
                 <p className="text-red-500 text-xs mt-1">
@@ -223,8 +236,8 @@ const RegisterPage = () => {
             </p>
           </form>
         </div>
-        </div>
-      </section>
+      </div>
+    </section>
   );
 };
 

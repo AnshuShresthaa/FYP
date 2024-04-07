@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { AiOutlineMenu, AiOutlineClose } from "react-icons/ai";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import { Link, useNavigate } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { UseSelector, useDispatch, useSelector } from "react-redux";
 
 import { images } from "../constants";
@@ -19,11 +20,15 @@ const NavItem = ({ item }) => {
     <li className="relative group">
       {item.type === "link" ? (
         <>
-          <a href={item.url} className="px-4 py-2 transition-colors duration-300 hover:text-blue-500">
+          <NavLink
+            to={item.url}
+            className="px-4 py-2 transition-colors duration-300 hover:text-blue-500"
+            activeClassName="text-blue-500 font-bold" 
+            exact
+          >
             {item.name}
-          </a>
-          <span className="text-blue-500 absolute transition-all duration-500 font-bold right-0 top-0 group-hover:right-[90%] opacity-0 group-hover:opacity-100">
-          </span>
+          </NavLink>
+          <span className="text-blue-500 absolute transition-all duration-500 font-bold right-0 top-0 group-hover:right-[90%] opacity-0 group-hover:opacity-100"></span>
         </>
       ) : (
         <>
