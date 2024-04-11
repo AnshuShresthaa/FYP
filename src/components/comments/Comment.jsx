@@ -30,7 +30,7 @@ const Comment = ({
 
   return (
     <div
-      className="flex flex-nowrap items-start gap-x-3 bg-[#F2F4F5] p-3 rounded-lg"
+      className="flex flex-nowrap items-start gap-x-3 bg-[#F2F4F5] p-3 rounded-lg mb-8"
       id={`comment-${comment?._id}`}
     >
       <img

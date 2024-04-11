@@ -80,7 +80,6 @@ const Users = () => {
         "Name",
         "Email",
         "Created At",
-        "is Verified",
         "is Admin",
         "",
       ]}
@@ -124,11 +123,6 @@ const Users = () => {
                 month: "short",
                 year: "numeric",
               })}
-            </p>
-          </td>
-          <td className="px-5 py-5 text-sm bg-white border-b border-gray-200">
-            <p className="text-gray-900 whitespace-no-wrap">
-              {user.verified ? "✔️" : "❌"}
             </p>
           </td>
           <td className="px-5 py-5 text-sm bg-white border-b border-gray-200">

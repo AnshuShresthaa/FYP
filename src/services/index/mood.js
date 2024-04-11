@@ -17,25 +17,6 @@ export const createMoodEntry = async ({ token, mood, note }) => {
         const { data } = await axios.post(`/api/mood`, moodData, config);
         return data;
     } catch (error) {
-        if (error.response && error.response.data.message)
-            throw new Error(error.response.data.message);
-        throw new Error(error.message);
-    }
-};
-
-export const getMoodEntry = async ({ token, id }) => {
-    try {
-        const config = {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        };
-
-        const { data } = await axios.get(`/api/mood/${id}`, config);
-        return data;
-    } catch (error) {
-        if (error.response && error.response.data.message)
-            throw new Error(error.response.data.message);
         throw new Error(error.message);
     }
 };
@@ -51,8 +32,21 @@ export const getAllMoodEntries = async (token) => {
         const { data } = await axios.get(`/api/mood`, config);
         return data.map(entry => ({ ...entry, date: new Date(entry.date) }));
     } catch (error) {
-        if (error.response && error.response.data.message)
-            throw new Error(error.response.data.message);
+        throw new Error(error.message);
+    }
+};
+
+export const getMoodEntry = async ({ token, id }) => {
+    try {
+        const config = {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        };
+
+        const { data } = await axios.get(`/api/mood/${id}`, config);
+        return data;
+    } catch (error) {
         throw new Error(error.message);
     }
 };
@@ -73,8 +67,6 @@ export const updateMoodEntry = async ({ token, id, mood, note }) => {
         const { data } = await axios.put(`/api/mood/${id}`, updateData, config);
         return data;
     } catch (error) {
-        if (error.response && error.response.data.message)
-            throw new Error(error.response.data.message);
         throw new Error(error.message);
     }
 };
@@ -90,8 +82,6 @@ export const deleteMoodEntry = async ({ token, id }) => {
         await axios.delete(`/api/mood/${id}`, config);
         return { message: "Mood entry deleted successfully" };
     } catch (error) {
-        if (error.response && error.response.data.message)
-            throw new Error(error.response.data.message);
         throw new Error(error.message);
     }
 };

@@ -25,33 +25,23 @@ const Journal = () => {
   const [filteredEntries, setFilteredEntries] = useState([]); // State for filtered entries
   
   const userState = useSelector((state) => state.user);
-
-  useEffect(() => {
-    const fetchJournalEntries = async () => {
-      try {
-        if (userState && userState.userInfo && userState.userInfo.token) {
-          const data = await getAllJournalEntries(userState.userInfo.token);
-          // Filter entries based on the authenticated user's ID
-          const userEntries = data.filter(entry => entry.userId === userState.userInfo.userId);
-          setJournalEntries(userEntries);
-          setFilteredEntries(userEntries); // Initialize filtered entries with user-specific journal entries
-        }
-      } catch (error) {
-        console.error("Error fetching journal entries:", error);
-      }
-    };
-  
-    fetchJournalEntries();
-  }, [userState]);
-  
-
-  // Clear journal entries when user logs out
-  useEffect(() => {
-    if (!userState.userInfo) {
-      setJournalEntries([]);
-      setFilteredEntries([]);
+useEffect(() => {
+  const fetchEntries = async () => {
+    try {
+      const response = await getAllJournalEntries(userState.userInfo.token);
+      const userEntries = response.filter(entry => entry.userId === userState.userInfo.userId);
+      setJournalEntries(userEntries);
+      setFilteredEntries(userEntries);
+    } catch (error) {
+      console.error("Error fetching journal entries:", error);
     }
-  }, [userState]);
+  };
+
+  if (userState && userState.userInfo && userState.userInfo.token) {
+    fetchEntries();
+  }
+}, [userState]);
+
 
   // Function to handle search keyword
   const handleSearchKeyword = ({ searchKeyword }) => {
@@ -62,6 +52,7 @@ const Journal = () => {
     setFilteredEntries(filtered);
   };
 
+  // Function to handle entry change
   const handleEntryChange = (field, value) => {
     setEntry({ ...entry, [field]: value });
 
@@ -69,6 +60,7 @@ const Journal = () => {
     setWordCount(words.length);
   };
 
+  // Function to add a new journal entry
   const handleAddEntry = async () => {
     try {
       const newEntry = {
@@ -86,12 +78,9 @@ const Journal = () => {
       });
   
       toast.success("Post added successfully");
-      console.log("Entry added:", addedEntry);
   
       // Update the journalEntries state by adding the new entry
       setJournalEntries(prevEntries => [...prevEntries, addedEntry]);
-      // Update the filteredEntries state by adding the new entry
-      setFilteredEntries(prevEntries => [...prevEntries, addedEntry]);
   
       setEntry({ title: '', content: '', tags: '' });
       setWordCount(0);
@@ -101,6 +90,7 @@ const Journal = () => {
     }
   };
 
+  // Function to handle editing an entry
   const handleEdit = (entry) => {
     setEditingEntry(entry);
     setEntry({ title: entry.title, content: entry.content, tags: entry.tags });
@@ -108,6 +98,7 @@ const Journal = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
+  // Function to handle deleting an entry
   const handleDelete = async (id) => {
     try {
       if (window.confirm("Do you want to delete your Post?")) {
@@ -122,6 +113,7 @@ const Journal = () => {
     }
   };
 
+  // Function to handle updating an entry
   const handleUpdateEntry = async () => {
     try {
       const updatedEntry = await updateJournalEntry({
@@ -151,6 +143,7 @@ const Journal = () => {
     }
   };
 
+  // Component for the calendar
   const Calendar = ({ onDateClick }) => {
     const days = ["S", "M", "T", "W", "T", "F", "S"];
     const currentDate = dayjs();
@@ -232,7 +225,7 @@ const Journal = () => {
 
   return (
     <MainLayout>
-      <div className="flex gap-4 items-start py-8 pr- pl-2 max-md:pr-2 max-md:flex-row bg-gray-200">
+      <div className="flex gap-4 items-start py-8 pr- pl-2 max-md:pr-2 max-md:flex-row">
         <Calendar onDateClick={setSelectDate} />
         <div className="flex flex-col w-6/12 max-md:ml-0 max-md:w-full">
           {/* Add the Search component */}

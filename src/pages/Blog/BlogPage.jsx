@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import BreadCrumbs from "../../components/BreadCrumbs";
 import MainLayout from '../../components/MainLayout';
-import { images,stables } from "../../constants";
+import { images, stables } from "../../constants";
 import { Link, useParams } from 'react-router-dom';
 import SuggestedPosts from './container/SuggestedPosts';
 import CommentsContainer from '../../components/comments/CommentsContainer';
@@ -12,7 +12,6 @@ import ErrorMessage from '../../components/ErrorMessage';
 import { useSelector } from 'react-redux';
 import parseJsonToHtml from '../../utils/parseJsonToHtml';
 import Editor from '../../components/editor/Editor';
-
 
 const BlogPage = () => {
   const { slug } = useParams();
@@ -73,15 +72,7 @@ const BlogPage = () => {
             </div> 
             <h1 className='text-3xl lg:text-4xl font-medium font-roboto mt-4 text-dark-hard'>
               {data?.title}
-            </h1>
-            <div className="w-full">
-              {!isLoading && !isError && (
-                <Editor
-                  content={data?.body}
-                  editable={false} 
-                />
-              )}
-            </div> 
+            </h1> 
             <CommentsContainer 
               comments={data?.comments}
               className="mt-10" 

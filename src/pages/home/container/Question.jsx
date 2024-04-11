@@ -89,7 +89,7 @@ const Question = () => {
       <div className="text-white text-5xl font-bold self-center mt-26 max-md:max-w-full max-md:text-4xl max-md:mt-10">
         Common Questions
       </div>
-      <div className="text-white text-center text-3xl self-center mt-9 mb-16 max-md:max-w-full">
+      <div className="text-white text-center text-2xl self-center mt-9 mb-8 max-md:max-w-full">
         Curiosity makes a man intelligent. Find the most asked questions related
         to mental health answered below.
       </div>

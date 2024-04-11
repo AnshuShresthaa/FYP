@@ -3,7 +3,7 @@ import { AiOutlineMenu, AiOutlineClose } from "react-icons/ai";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import { Link, useNavigate } from "react-router-dom";
 import { NavLink } from "react-router-dom";
-import { UseSelector, useDispatch, useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import { images } from "../constants";
 import { logout } from "../store/actions/user";
@@ -71,6 +71,7 @@ const Header = () => {
 
   const logoutHandler = () => {
     dispatch(logout());
+    navigate("/"); // Redirect to home page after logout
   };
 
   return (

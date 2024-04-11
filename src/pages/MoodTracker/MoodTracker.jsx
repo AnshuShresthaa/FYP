@@ -178,9 +178,9 @@ const MoodTracker = () => {
     <MainLayout>
       <div className="bg-gray-200 min-h-screen">
         <div className="flex justify-center items-center px-16 py-20 text-2xl font-medium max-md:px-5">
-          <div className="border rounded-md bg-white p-6 w-[800px] max-md:mt-10 flex flex-col items-center">
+          <div className="bg-white p-6 w-[800px] max-md:mt-10 flex flex-col items-center">
             <div className="text-3xl font-semibold">
-              Hey, <span className="text-sky-500">{loggedInUserName}</span>
+              Hey, <span className="text-sky-500">{loggedInUserName} 👋</span>
             </div>
             <div className="mt-8 text-xl max-md:mt-6 mb-10 text-center">How was your day?</div>
             <div>
@@ -192,8 +192,9 @@ const MoodTracker = () => {
               </div>
             </div>
           </div>
+          
           {/* Mood calendar*/}
-          <div className="bg-white rounded-md p-6 ml-6">
+          <div className="bg-white p-6 ml-6">
             <h2 className="text-xl font-semibold mb-6 text-center">Mood Calendar</h2>
             <div className="flex justify-between mb-4">
               <GrFormPrevious className="cursor-pointer" onClick={handlePreviousMonth} />
@@ -253,8 +254,8 @@ const MoodTracker = () => {
         {/* Mood entry list */}
         <div className="flex justify-center flex-wrap">
           {moodEntries.map((entry, index) => (
-            <div key={index} className="border rounded-md p-4 m-2 bg-white flex flex-col items-center">
-              <div className={`w-full h-32 flex items-center justify-center rounded-md mb-2 ${moodIcons.find((icon) => icon.icon === entry.mood).color}`}>
+            <div key={index} className="p-4 m-2 bg-white flex flex-col items-center mb-12">
+              <div className={`w-full h-32 flex items-center justify-center mb-2 ${moodIcons.find((icon) => icon.icon === entry.mood).color}`}>
                 <span className="text-3xl">{entry.mood}</span>
               </div>
               <div className="bg-white rounded-md p-2 mt-2">
