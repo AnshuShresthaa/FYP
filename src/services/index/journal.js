@@ -1,19 +1,22 @@
 import axios from "axios";
 
-export const createPost = async ({ token, title, content }) => {
+export const createPost = async ({ token, title, content, user, tags }) => {
     try {
         const config = {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
         };
-
+        console.log(token)
+    
         const postData = {
             title: title,
             content: content,
-            date: new Date().toISOString(),
+            user: user, 
+            tags:tags,
+            
         };
-
+        
         const { data } = await axios.post(`/api/journal`, postData, config);
         return data;
     } catch (error) {
@@ -50,13 +53,35 @@ export const getAllJournalEntries = async (token) => {
         };
 
         const { data } = await axios.get(`/api/journal`, config);
-        return data.map(entry => ({ ...entry, date: new Date(entry.date) }));
+        return data; // No need to map the entries here
     } catch (error) {
         if (error.response && error.response.data.message)
             throw new Error(error.response.data.message);
         throw new Error(error.message);
     }
 };
+
+export const getUserJournalEntries = async (token,userId) => {
+    try {
+        const config = {
+            headers: {
+                Authorization: `Bearer ${token.token}`,
+            },
+        };
+        
+        const { data } = await axios.get(`/api/journal/${token.userId}`, config);
+
+     
+        
+        return data;
+       
+    } catch (error) {
+        if (error.response && error.response.data.message)
+            throw new Error(error.response.data.message);
+        throw new Error(error.message);
+    }
+};
+
 
 export const updateJournalEntry = async ({ token, id, title, content, tags }) => {
     try {

@@ -11,9 +11,10 @@ import cn from "../../utils/cn";
 import { GrFormNext, GrFormPrevious } from 'react-icons/gr';
 import {
   createPost,
-  getAllJournalEntries,
+  getUserJournalEntries,
   updateJournalEntry,
-  deleteJournalEntry
+  deleteJournalEntry,
+  getAllJournalEntries
 } from "../../services/index/journal"; 
 
 const Journal = () => {
@@ -25,22 +26,27 @@ const Journal = () => {
   const [filteredEntries, setFilteredEntries] = useState([]); // State for filtered entries
   
   const userState = useSelector((state) => state.user);
-useEffect(() => {
-  const fetchEntries = async () => {
-    try {
-      const response = await getAllJournalEntries(userState.userInfo.token);
-      const userEntries = response.filter(entry => entry.userId === userState.userInfo.userId);
-      setJournalEntries(userEntries);
-      setFilteredEntries(userEntries);
-    } catch (error) {
-      console.error("Error fetching journal entries:", error);
-    }
-  };
-
-  if (userState && userState.userInfo && userState.userInfo.token) {
-    fetchEntries();
-  }
-}, [userState]);
+    useEffect(() => {
+      const fetchEntries = async () => {
+        try {
+          const userEntries = await getUserJournalEntries({
+            token: userState.userInfo.token,
+            userId: userState.userInfo._id
+          });
+          console.log(userEntries);
+          setJournalEntries(userEntries);
+          console.log(journalEntries);
+          setFilteredEntries(userEntries);
+        } catch (error) {
+          console.error("Error fetching journal entries:", error);
+        }
+      };
+    
+      if (userState && userState.userInfo && userState.userInfo.token) {
+        fetchEntries();
+      }
+    }, [userState]);
+  
 
 
   // Function to handle search keyword
@@ -63,32 +69,29 @@ useEffect(() => {
   // Function to add a new journal entry
   const handleAddEntry = async () => {
     try {
+      
       const newEntry = {
-        title: entry.title,
-        content: entry.content,
-        tags: entry.tags,
-        date: selectDate.toISOString() // Add the date property to the new entry
-      };
-  
-      const addedEntry = await createPost({
         token: userState.userInfo.token,
         title: entry.title,
         content: entry.content,
         tags: entry.tags,
-      });
+        user: userState.userInfo._id // Pass the user information
+      };
   
-      toast.success("Post added successfully");
+      const addedEntry = await createPost(newEntry);
   
       // Update the journalEntries state by adding the new entry
       setJournalEntries(prevEntries => [...prevEntries, addedEntry]);
   
       setEntry({ title: '', content: '', tags: '' });
       setWordCount(0);
+      toast.success("Post added successfully");
     } catch (error) {
       toast.error("Error adding entry");
       console.error("Error adding entry:", error);
     }
   };
+
 
   // Function to handle editing an entry
   const handleEdit = (entry) => {

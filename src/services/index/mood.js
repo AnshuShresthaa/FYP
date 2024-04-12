@@ -36,6 +36,24 @@ export const getAllMoodEntries = async (token) => {
     }
 };
 
+export const getUserMoodEntries = async (token) => {
+    try {
+        const config = {
+            headers: {
+                Authorization: `Bearer ${token.token}`,
+            },
+        };
+        
+        // Make a request to the backend to get mood entries only for the authenticated user
+        const { data } = await axios.get(`/api/mood/${token.userId}`, config);
+       console.log(data)
+        return data.map(entry => ({ ...entry, date: new Date(entry.date) }));
+    } catch (error) {
+        throw new Error(error.message);
+    }
+};
+
+
 export const getMoodEntry = async ({ token, id }) => {
     try {
         const config = {

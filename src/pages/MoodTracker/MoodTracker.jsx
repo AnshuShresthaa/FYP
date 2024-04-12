@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import dayjs from "dayjs";
 import MainLayout from "../../components/MainLayout";
 import CalendarPopup from "./CalendarPopup";
-import { getAllMoodEntries, deleteMoodEntry, updateMoodEntry } from "../../services/index/mood";
+import { getAllMoodEntries, deleteMoodEntry, updateMoodEntry, getMoodEntry, getUserMoodEntries } from "../../services/index/mood";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
@@ -57,7 +57,11 @@ const MoodTracker = () => {
     const fetchMoodEntries = async () => {
       try {
         if (userState && userState.userInfo && userState.userInfo.token) {
-          const data = await getAllMoodEntries(); 
+          
+          const data = await getUserMoodEntries({
+            token: userState.userInfo.token,
+            userId: userState.userInfo._id
+          }); // Pass token to fetch only the user's mood entries
           setMoodEntries(data);
           setLoading(false);
         }
@@ -102,6 +106,12 @@ const MoodTracker = () => {
   };
 
   const handleEditMoodEntry = (entry) => {
+    // Check if the mood entry belongs to the currently logged in user
+    if (entry.userId !== userState.userInfo._id) {
+      toast.error("You can only edit your own mood entries");
+      return;
+    }
+    
     // Set the editing mood entry and populate the form fields
     setEditingMoodEntry(entry);
     setMood(entry.mood);
