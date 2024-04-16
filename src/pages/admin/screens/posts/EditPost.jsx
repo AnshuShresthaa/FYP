@@ -132,7 +132,7 @@ const EditPost = () => {
                   alt={data?.title}
                   className="rounded-xl w-full"
                 />
-              ) : initialPhoto ? (
+              ) : data?.photo ? (
                 <img
                   src={stables.UPLOAD_FOLDER_BASE_URL + data?.photo}
                   alt={data?.title}
@@ -173,7 +173,7 @@ const EditPost = () => {
               </label>
               <input
                 id="title"
-                value={title}
+                value={data?.title}
                 className="d-input d-input-bordered border-slate-300 !outline-slate-300 text-xl font-medium font-roboto text-dark-hard"
                 onChange={(e) => setTitle(e.target.value)}
                 placeholder="title"
@@ -185,7 +185,7 @@ const EditPost = () => {
               </label>
               <input
                 id="caption"
-                value={caption}
+                value={data?.caption}
                 className="d-input d-input-bordered border-slate-300 !outline-slate-300 text-xl font-medium font-roboto text-dark-hard"
                 onChange={(e) => setCaption(e.target.value)}
                 placeholder="caption"
@@ -264,5 +264,3 @@ const EditPost = () => {
 };
 
 export default EditPost;
-
-

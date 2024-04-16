@@ -9,10 +9,12 @@ import {
 } from "../../../../services/index/postCategories";
 import DataTable from "../../components/DataTable";
 import { useState } from "react";
+import ConfirmationModal from "../../../../utils/ConfirmationModal"; // Import ConfirmationModal
 
 const Categories = () => {
-  const [categoryTitle, seTcategoryTitle] = useState("");
-
+  const [categoryTitle, setCategoryTitle] = useState("");
+  const [showConfirmationModal, setShowConfirmationModal] = useState(false);
+  const [deleteCategoryId, setDeleteCategoryId] = useState("");
   const { mutate: mutateCreateCategory, isLoading: isLoadingCreateCategory } =
     useMutation({
       mutationFn: ({ token, title }) => {
@@ -63,6 +65,24 @@ const Categories = () => {
     });
   };
 
+  const openDeleteConfirmationModal = (categoryId) => {
+    setShowConfirmationModal(true);
+    setDeleteCategoryId(categoryId);
+  };
+
+  const closeConfirmationModal = () => {
+    setShowConfirmationModal(false);
+    setDeleteCategoryId("");
+  };
+
+  const handleConfirmDeleteCategory = () => {
+    deleteDataHandler({
+      slug: deleteCategoryId,
+      token: userState.userInfo.token,
+    });
+    closeConfirmationModal();
+  };
+
   return (
     <div className="grid grid-cols-12 gap-x-4">
       <div className="col-span-4 py-8">
@@ -71,7 +91,7 @@ const Categories = () => {
           <input
             value={categoryTitle}
             className="d-input d-input-bordered border-slate-300 !outline-slate-300 text-xl font-medium font-roboto text-dark-hard"
-            onChange={(e) => seTcategoryTitle(e.target.value)}
+            onChange={(e) => setCategoryTitle(e.target.value)}
             placeholder="category title"
           />
           <button
@@ -102,7 +122,7 @@ const Categories = () => {
           userState={userState}
         >
           {categoriesData?.data.map((category) => (
-            <tr>
+            <tr key={category._id}> {/* Add key attribute */}
               <td className="px-5 py-5 text-sm bg-white border-b border-gray-200">
                 <div className="flex items-center">
                   <p className="text-gray-900 whitespace-no-wrap">
@@ -124,17 +144,12 @@ const Categories = () => {
                   disabled={isLoadingDeleteData}
                   type="button"
                   className="text-red-600 hover:text-red-900 disabled:opacity-70 disabled:cursor-not-allowed"
-                  onClick={() => {
-                    deleteDataHandler({
-                      slug: category?._id,
-                      token: userState.userInfo.token,
-                    });
-                  }}
+                  onClick={() => openDeleteConfirmationModal(category._id)} 
                 >
                   Delete
                 </button>
                 <Link
-                  to={`/admin/categories/manage/edit/${category?._id}`}
+                  to={`/admin/categories/manage/edit/${category._id}`}
                   className="text-green-600 hover:text-green-900"
                 >
                   Edit
@@ -144,8 +159,15 @@ const Categories = () => {
           ))}
         </DataTable>
       </div>
+      {showConfirmationModal && (
+        <ConfirmationModal
+          message="Are you sure you want to delete this category?"
+          onConfirm={handleConfirmDeleteCategory}
+          onCancel={closeConfirmationModal}
+        />
+      )}
     </div>
   );
 };
 
-export default Categories; 
+export default Categories;

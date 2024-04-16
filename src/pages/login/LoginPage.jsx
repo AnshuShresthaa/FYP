@@ -4,8 +4,6 @@ import { Link, useNavigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
-
-import MainLayout from "../../components/MainLayout";
 import { login } from "../../services/index/users";
 import { userActions } from "../../store/reducers/userReducers";
 
@@ -16,7 +14,7 @@ const LoginPage = () => {
   const dispatch = useDispatch();
   const userState = useSelector(state => state.user)
 
-  const { mutate, isLoading } = useMutation({
+  const { mutate } = useMutation({
     mutationFn: ({ email, password }) => {
       return login({ email, password });
     },
@@ -31,10 +29,13 @@ const LoginPage = () => {
   });
 
   useEffect(() => {
-    if (userState.userInfo) {
+    if (userState.userInfo && userState.userInfo.isAdmin) {
+      navigate("/admin");
+    } else if (userState.userInfo) {
       navigate("/");
     }
   }, [navigate, userState.userInfo]);
+  
 
   const {
     register,

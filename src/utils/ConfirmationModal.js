@@ -3,11 +3,11 @@ import React from "react";
 const ConfirmationModal = ({ message, onConfirm, onCancel }) => {
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="bg-white rounded-lg p-8">
-        <p className="mb-4">{message}</p>
+      <div className="bg-white rounded-lg p-8 w-96">
+        <p className="mb-6 text-lg">{message}</p>
         <div className="flex justify-end">
           <button
-            className="mr-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none focus:bg-blue-600"
+            className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none focus:bg-blue-600 mr-4"
             onClick={onConfirm}
           >
             Yes

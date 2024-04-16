@@ -8,10 +8,10 @@ import { useNavigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { GrFormNext, GrFormPrevious } from "react-icons/gr";
+import ConfirmationModal from "../../utils/ConfirmationModal";
+import { images } from "../../constants";
 
 const MoodTracker = () => {
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
   const userState = useSelector((state) => state.user);
   const loggedInUserName = userState.userInfo ? userState.userInfo.name : "";
   const [showCalendarPopup, setShowCalendarPopup] = useState(false);
@@ -23,35 +23,17 @@ const MoodTracker = () => {
   const [mood, setMood] = useState(""); 
   const [editingMoodEntry, setEditingMoodEntry] = useState(null);
   const [note, setNote] = useState(""); 
+  const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false); // State to control deletion confirmation modal
+  const [entryToDelete, setEntryToDelete] = useState(null); // State to store the mood entry to delete
   const popupRef = useRef(null);
 
   const moodIcons = [
-    {
-      icon: "🙁",
-      text: "Rough day",
-      color: "bg-red-200",
-    },
-    {
-      icon: "😐",
-      text: "Not good",
-      color: "bg-yellow-200",
-    },
-    {
-      icon: "🙂",
-      text: "Not bad",
-      color: "bg-green-200",
-    },
-    {
-      icon: "😄",
-      text: "Good",
-      color: "bg-blue-200",
-    },
-    {
-      icon: "🤗",
-      text: "Great!",
-      color: "bg-purple-200",
-    },
-  ];
+    { icon: "🙁", text: "Rough day", color: "red" },
+    { icon: "😐", text: "Not good", color: "yellow" },
+    { icon: "🙂", text: "Not bad", color: "green" },
+    { icon: "😄", text: "Good", color: "blue" },
+    { icon: "🤗", text: "Great!", color: "purple" },
+  ].map(icon => ({ ...icon, color: `bg-${icon.color}-200` }));
 
   useEffect(() => {
     const fetchMoodEntries = async () => {
@@ -79,14 +61,6 @@ const MoodTracker = () => {
       setMoodEntries([]);
     }
   }, [userState]);
-
-  const handleClickOutside = (event) => {
-    if (popupRef.current && !popupRef.current.contains(event.target)) {
-      setShowCalendarPopup(false);
-    }
-  };
-
-  
 
   const toggleCalendarPopup = () => {
     setShowCalendarPopup((prev) => !prev);
@@ -171,18 +145,53 @@ const MoodTracker = () => {
   };
 
   const handleDeleteMoodEntry = async (id) => {
+    setEntryToDelete(id); // Set the mood entry to delete
+    setShowDeleteConfirmation(true); // Show the deletion confirmation modal
+  };
+
+  // Function to confirm mood entry deletion
+  const handleConfirmDelete = async () => {
     try {
-      if (window.confirm("Do you want to delete your mood?")) {
-        await deleteMoodEntry({ token: userState.userInfo.token, id });
-        // Remove the deleted entry from the UI
-        setMoodEntries(prevEntries => prevEntries.filter(entry => entry._id !== id));
-        toast.success("Post deleted successfully");
-      }
+      // Call the deleteMoodEntry API with the entry to delete
+      await deleteMoodEntry({ token: userState.userInfo.token, id: entryToDelete });
+      
+      // Remove the deleted entry from the UI
+      setMoodEntries(prevEntries => prevEntries.filter(entry => entry._id !== entryToDelete));
+      
+      setEntryToDelete(null);
+      setShowDeleteConfirmation(false);
+      
+      toast.success("Mood entry deleted successfully");
     } catch (error) {
-      toast.error("Error deleting entry");
-      console.error("Error deleting entry:", error);
+      toast.error("Error deleting mood entry");
+      console.error("Error deleting mood entry:", error);
     }
   };
+
+  // Function to cancel mood entry deletion
+  const handleCancelDelete = () => {
+    setEntryToDelete(null);
+    setShowDeleteConfirmation(false);
+  };
+
+  if (!userState || !userState.userInfo || !userState.userInfo.token) {
+    return (
+      <MainLayout>
+        <div className="flex justify-center items-center h-screen">
+          <div className="text-center">
+            {/* Add the image */}
+            <img 
+              src={images.MoodTrackerImage} 
+              className="mb-4 max-w-xs max-h-xs lg:max-w-xl lg:max-h-xl" 
+              alt="Mood Tracker" 
+            />
+            <h2 className="text-3xl font-semibold mb-4">You are not logged in!</h2>
+            <p>Please <a href="/login" className="text-blue-500">login</a> to access the mood tracking feature.</p>
+          </div>
+        </div>
+      </MainLayout>
+    );
+  }
 
   return (
     <MainLayout>
@@ -321,6 +330,14 @@ const MoodTracker = () => {
           </div>
         )}
 
+        {/* Delete confirmation modal */}
+        {showDeleteConfirmation && (
+          <ConfirmationModal
+            message="Are you sure you want to delete your mood entry?"
+            onConfirm={handleConfirmDelete}
+            onCancel={handleCancelDelete}
+          />
+        )}
 
         {/* Calendar popup */}
         {showCalendarPopup && (

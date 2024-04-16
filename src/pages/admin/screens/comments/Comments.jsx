@@ -13,6 +13,54 @@ import { Link } from "react-router-dom";
 import ConfirmationModal from "../../../../utils/ConfirmationModal";
 
 const Comments = () => {
+  const [showConfirmationModal, setShowConfirmationModal] = useState(false);
+  const [commentIdToUpdate, setCommentIdToUpdate] = useState("");
+  const [commentCheckToUpdate, setCommentCheckToUpdate] = useState(false);
+  const [deleteCommentId, setDeleteCommentId] = useState("");
+
+  const openConfirmationModal = (commentId, check) => {
+    setShowConfirmationModal(true);
+    setCommentIdToUpdate(commentId);
+    setCommentCheckToUpdate(check);
+  };
+
+  const openDeleteConfirmationModal = (commentId) => {
+    setShowConfirmationModal(true);
+    setDeleteCommentId(commentId);
+  };
+
+  const closeConfirmationModal = () => {
+    setShowConfirmationModal(false);
+    setCommentIdToUpdate("");
+    setCommentCheckToUpdate(false);
+    setDeleteCommentId("");
+  };
+
+  const handleConfirmUpdateComment = () => {
+    mutateUpdateCommentCheck({
+      token: userState.userInfo.token,
+      check: !commentCheckToUpdate,
+      commentId: commentIdToUpdate,
+    });
+    closeConfirmationModal();
+  };
+
+  const handleCancelUpdateComment = () => {
+    closeConfirmationModal();
+  };
+
+  const handleConfirmDeleteComment = () => {
+    deleteDataHandler({
+      slug: deleteCommentId,
+      token: userState.userInfo.token,
+    });
+    closeConfirmationModal();
+  };
+
+  const handleCancelDeleteComment = () => {
+    closeConfirmationModal();
+  };
+
   const {
     userState,
     currentPage,
@@ -24,6 +72,7 @@ const Comments = () => {
     queryClient,
     searchKeywordHandler,
     submitSearchKeywordHandler,
+    deleteDataHandler,
     setCurrentPage,
   } = useDataTable({
     dataQueryFn: () =>
@@ -37,64 +86,6 @@ const Comments = () => {
       });
     },
   });
-
-  const [showModal, setShowModal] = useState(false);
-  const [commentIdToUpdate, setCommentIdToUpdate] = useState(null);
-  const [commentCheckToUpdate, setCommentCheckToUpdate] = useState(false);
-  const [modalMessage, setModalMessage] = useState("");
-
-  const confirmUpdateComment = (commentId, check) => {
-    setCommentIdToUpdate(commentId);
-    setCommentCheckToUpdate(!check);
-    setModalMessage(
-      `Do you want to ${
-        check ? "unapprove" : "approve"
-      } this comment?`
-    );
-    setShowModal(true);
-  };
-
-  const confirmDeleteComment = (commentId) => {
-    setCommentIdToUpdate(commentId);
-    setModalMessage("Do you want to delete this comment?");
-    setShowModal(true);
-  };
-
-  const handleConfirm = () => {
-    if (commentIdToUpdate && commentCheckToUpdate !== null) {
-      // Update comment approval status
-      mutateUpdateCommentCheck({
-        token: userState.userInfo.token,
-        check: commentCheckToUpdate,
-        commentId: commentIdToUpdate,
-      });
-    } else if (commentIdToUpdate) {
-      // Delete the comment
-      deleteDataHandler({
-        slug: commentIdToUpdate,
-        token: userState.userInfo.token,
-      });
-    }
-    setShowModal(false);
-  };
-
-  const handleCancel = () => {
-    setShowModal(false);
-  };
-
-  const deleteDataHandler = async ({ slug, token }) => {
-    try {
-      // Send a request to delete the comment
-      await deleteComment({ commentId: slug, token });
-      // Optionally, you may want to invalidate the comments query to refresh the data
-      queryClient.invalidateQueries(["comments"]);
-      // Resolve with the success message
-      return "Comment is deleted";
-    } catch (error) {
-      // Handle errors if any
-      throw new Error("Failed to delete comment");
-    }
-  };
 
   const {
     mutate: mutateUpdateCommentCheck,
@@ -147,7 +138,8 @@ const Comments = () => {
                     <img
                       src={
                         comment?.user?.avatar
-                          ? stables.UPLOAD_FOLDER_BASE_URL + comment?.user?.avatar
+                          ? stables.UPLOAD_FOLDER_BASE_URL +
+                            comment?.user?.avatar
                           : images.userImage
                       }
                       alt={comment?.user?.name}
@@ -174,7 +166,9 @@ const Comments = () => {
                   </Link>
                 </p>
               )}
-              <p className="text-gray-900 whitespace-no-wrap">{comment?.desc}</p>
+              <p className="text-gray-900 whitespace-no-wrap">
+                {comment?.desc}
+              </p>
             </td>
             <td className="px-5 py-5 text-sm bg-white border-b border-gray-200">
               <p className="text-gray-900 whitespace-no-wrap">
@@ -206,27 +200,42 @@ const Comments = () => {
                     ? "text-yellow-600 hover:text-yellow-900"
                     : "text-green-600 hover:text-green-900"
                 } disabled:opacity-70 disabled:cursor-not-allowed`}
-                onClick={() => confirmUpdateComment(comment._id, comment.check)}
+                onClick={() =>
+                  openConfirmationModal(comment._id, comment.check)
+                }
               >
                 {comment?.check ? "Unapprove" : "Approve"}
               </button>
               <button
-                disabled={isLoadingDeleteData}
-                type="button"
-                className="text-red-600 hover:text-red-900 disabled:opacity-70 disabled:cursor-not-allowed"
-                onClick={() => confirmDeleteComment(comment._id)}
-              >
-                Delete
-              </button>
+              disabled={isLoadingDeleteData}
+              type="button"
+              className="text-red-600 hover:text-red-900 disabled:opacity-70 disabled:cursor-not-allowed"
+              onClick={() => openDeleteConfirmationModal(comment._id)}
+            >
+              Delete
+            </button>
             </td>
           </tr>
         ))}
       </DataTable>
-      {showModal && (
+
+      {/* Render ConfirmationModal if showConfirmationModal is true */}
+      {showConfirmationModal && (
         <ConfirmationModal
-          message={modalMessage}
-          onConfirm={handleConfirm}
-          onCancel={handleCancel}
+          message={`Do you want to ${
+            commentCheckToUpdate ? "unapprove" : "approve"
+          } this comment?`}
+          onConfirm={handleConfirmUpdateComment}
+          onCancel={handleCancelUpdateComment}
+        />
+      )}
+
+      {/* Render Delete ConfirmationModal if showConfirmationModal is true and deleteCommentId is set */}
+      {showConfirmationModal && deleteCommentId && (
+        <ConfirmationModal
+          message="Are you sure you want to delete this comment?"
+          onConfirm={handleConfirmDeleteComment}
+          onCancel={handleCancelDeleteComment}
         />
       )}
     </>

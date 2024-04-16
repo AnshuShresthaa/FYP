@@ -9,6 +9,8 @@ import dayjs from "dayjs";
 import { generateDate, months } from "../../utils/Calendar";
 import cn from "../../utils/cn";
 import { GrFormNext, GrFormPrevious } from 'react-icons/gr';
+import { images } from "../../constants";
+import ConfirmationModal from "../../utils/ConfirmationModal";
 import {
   createPost,
   getUserJournalEntries,
@@ -24,30 +26,29 @@ const Journal = () => {
   const [journalEntries, setJournalEntries] = useState([]);
   const [editingEntry, setEditingEntry] = useState(null);
   const [filteredEntries, setFilteredEntries] = useState([]); // State for filtered entries
-  
-  const userState = useSelector((state) => state.user);
-    useEffect(() => {
-      const fetchEntries = async () => {
-        try {
-          const userEntries = await getUserJournalEntries({
-            token: userState.userInfo.token,
-            userId: userState.userInfo._id
-          });
-          console.log(userEntries);
-          setJournalEntries(userEntries);
-          console.log(journalEntries);
-          setFilteredEntries(userEntries);
-        } catch (error) {
-          console.error("Error fetching journal entries:", error);
-        }
-      };
-    
-      if (userState && userState.userInfo && userState.userInfo.token) {
-        fetchEntries();
-      }
-    }, [userState]);
-  
+  const [showDeleteModal, setShowDeleteModal] = useState(false); // State to control the delete confirmation modal
+  const [entryToDelete, setEntryToDelete] = useState(null); // State to store the entry ID to delete
 
+  const userState = useSelector((state) => state.user);
+
+  useEffect(() => {
+    const fetchEntries = async () => {
+      try {
+        const userEntries = await getUserJournalEntries({
+          token: userState.userInfo.token,
+          userId: userState.userInfo._id
+        });
+        setJournalEntries(userEntries);
+        setFilteredEntries(userEntries);
+      } catch (error) {
+        console.error("Error fetching journal entries:", error);
+      }
+    };
+
+    if (userState && userState.userInfo && userState.userInfo.token) {
+      fetchEntries();
+    }
+  }, [userState]);
 
   // Function to handle search keyword
   const handleSearchKeyword = ({ searchKeyword }) => {
@@ -69,7 +70,6 @@ const Journal = () => {
   // Function to add a new journal entry
   const handleAddEntry = async () => {
     try {
-      
       const newEntry = {
         token: userState.userInfo.token,
         title: entry.title,
@@ -77,21 +77,20 @@ const Journal = () => {
         tags: entry.tags,
         user: userState.userInfo._id // Pass the user information
       };
-  
+
       const addedEntry = await createPost(newEntry);
-  
+
       // Update the journalEntries state by adding the new entry
       setJournalEntries(prevEntries => [...prevEntries, addedEntry]);
-  
+
       setEntry({ title: '', content: '', tags: '' });
       setWordCount(0);
       toast.success("Post added successfully");
     } catch (error) {
-      toast.error("Error adding entry");
+      toast.error("Please fill out all fields in the journal form");
       console.error("Error adding entry:", error);
     }
   };
-
 
   // Function to handle editing an entry
   const handleEdit = (entry) => {
@@ -103,17 +102,36 @@ const Journal = () => {
 
   // Function to handle deleting an entry
   const handleDelete = async (id) => {
+    // Show the delete confirmation modal
+    setShowDeleteModal(true);
+    // Set the entry ID to delete
+    setEntryToDelete(id);
+  };
+
+  // Function to handle confirming the delete action
+  const handleConfirmDelete = async () => {
     try {
-      if (window.confirm("Do you want to delete your Post?")) {
-        await deleteJournalEntry({ token: userState.userInfo.token, id });
-        // Remove the deleted entry from the UI
-        setJournalEntries(prevEntries => prevEntries.filter(entry => entry._id !== id));
-        toast.success("Post deleted successfully");
-      }
+      await deleteJournalEntry({ token: userState.userInfo.token, id: entryToDelete });
+      // Remove the deleted entry from the UI
+      setJournalEntries(prevEntries => prevEntries.filter(entry => entry._id !== entryToDelete));
+      toast.success("Post deleted successfully");
     } catch (error) {
       toast.error("Error deleting entry");
       console.error("Error deleting entry:", error);
+    } finally {
+      // Hide the delete confirmation modal
+      setShowDeleteModal(false);
+      // Reset the entry ID to delete
+      setEntryToDelete(null);
     }
+  };
+
+  // Function to handle cancelling the delete action
+  const handleCancelDelete = () => {
+    // Hide the delete confirmation modal
+    setShowDeleteModal(false);
+    // Reset the entry ID to delete
+    setEntryToDelete(null);
   };
 
   // Function to handle updating an entry
@@ -218,6 +236,11 @@ const Journal = () => {
       <MainLayout>
         <div className="flex justify-center items-center h-screen">
           <div className="text-center">
+            <img
+              src={images.JournalErrorImage}
+              className="mb-4 max-w-xs max-h-xs lg:max-w-xl lg:max-h-xl"
+              alt="Journal Error"
+            />
             <h2 className="text-3xl font-semibold mb-4">You are not logged in!</h2>
             <p>Please <a href="/login" className="text-blue-500">login</a> to access the journal feature.</p>
           </div>
@@ -225,6 +248,7 @@ const Journal = () => {
       </MainLayout>
     );
   }
+  
 
   return (
     <MainLayout>
@@ -323,6 +347,15 @@ const Journal = () => {
           </div>
         </div>
       </div>
+
+      {/* Delete confirmation modal */}
+      {showDeleteModal && (
+        <ConfirmationModal
+          message="Are you sure you want to delete your journal entry?"
+          onConfirm={handleConfirmDelete}
+          onCancel={handleCancelDelete}
+        />
+      )}
     </MainLayout>
   );
 };

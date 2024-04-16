@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import { FiMessageSquare, FiEdit2, FiTrash } from "react-icons/fi";
 
 import { images, stables } from "../../constants";
 import CommentForm from "./CommentForm";
+import ConfirmationModal from "../../utils/ConfirmationModal";
 
 const Comment = ({
   comment,
@@ -15,6 +16,9 @@ const Comment = ({
   deleteComment,
   replies,
 }) => {
+  const [showConfirmation, setShowConfirmation] = useState(false);
+  const [commentToDelete, setCommentToDelete] = useState(null);
+
   const isUserLoggined = Boolean(logginedUserId);
   const commentBelongsToUser = logginedUserId === comment.user._id;
   const isReplying =
@@ -28,11 +32,32 @@ const Comment = ({
   const repliedCommentId = parentId ? parentId : comment._id;
   const replyOnUserId = comment.user._id;
 
+  const handleDeleteConfirmation = () => {
+    setShowConfirmation(true);
+    setCommentToDelete(comment._id);
+  };
+
+  const handleConfirmDelete = () => {
+    deleteComment(commentToDelete);
+    setShowConfirmation(false);
+  };
+
+  const handleCancelDelete = () => {
+    setShowConfirmation(false);
+  };
+
   return (
     <div
       className="flex flex-nowrap items-start gap-x-3 bg-[#F2F4F5] p-3 rounded-lg mb-8"
       id={`comment-${comment?._id}`}
     >
+      {showConfirmation && (
+        <ConfirmationModal
+          message="Are you sure you want to delete this comment?"
+          onConfirm={handleConfirmDelete}
+          onCancel={handleCancelDelete}
+        />
+      )}
       <img
         src={
           comment?.user?.avatar
@@ -92,7 +117,7 @@ const Comment = ({
               </button>
               <button
                 className="flex items-center space-x-2"
-                onClick={() => deleteComment(comment._id)}
+                onClick={handleDeleteConfirmation}
               >
                 <FiTrash className="w-4 h-auto" />
                 <span>Delete</span>

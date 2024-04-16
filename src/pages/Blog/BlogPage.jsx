@@ -24,9 +24,9 @@ const BlogPage = () => {
     queryKey: ['blog', slug],
     onSuccess: (data) => {
       setbreadCrumbsData([
-          { name: "Home", link: "/" },
-          { name: "BlogPage", link: "/Blog" },
-          { name: "Blog title", link: `/blog/${slug}` },
+        { name: "Home", link: "/" },
+        { name: "BlogPage", link: "/Blog" },
+        { name: "data title", link: `/blog/${data.slug}` },
       ]);
       setBody(parseJsonToHtml(data?.body));
     },
@@ -45,38 +45,43 @@ const BlogPage = () => {
     <MainLayout>
       {isLoading ? (
         <ArticleDetailSkeleton />
-      ): isError ? ( 
-        <ErrorMessage message="Couldnt fetch the post details" /> 
+      ) : isError ? (
+        <ErrorMessage message="Couldnt fetch the post details" />
       ) : (
         <section className='container mx-auto max-w-5xl grid lg:grid-cols-3 gap-8 items-start'>
-          <article className="lg:col-span-2"> 
+          <article className="lg:col-span-2">
             <BreadCrumbs data={breadCrumbsData} />
             <img
               className='rounded-xl w-full lg:w-full lg:h-auto'
               src={
-                data?.photo 
-                ? stables.UPLOAD_FOLDER_BASE_URL + data?.photo 
-                : images.Blog1Image
+                data?.photo
+                  ? stables.UPLOAD_FOLDER_BASE_URL + data?.photo
+                  : images.Blog1Image
               }
               alt={data?.title}
             />
             <div className='mt-4 flex gap-2'>
               {data?.categories.map((category) => (
-                <Link 
+                <Link
                   to={`/Blog?category=${category.name}`}
                   className="text-primary text-sm font-roboto inline-block md:text-base"
-                  >
-                    {category.name}
+                >
+                  {category.name}
                 </Link>
-              ))} 
-            </div> 
+              ))}
+            </div>
             <h1 className='text-3xl lg:text-4xl font-medium font-roboto mt-4 text-dark-hard'>
               {data?.title}
-            </h1> 
-            <CommentsContainer 
+            </h1>
+            <div className="w-full">
+              {!isLoading && !isError && (
+                <Editor content={data?.body} editable={false} />
+              )}
+            </div>
+            <CommentsContainer
               comments={data?.comments}
-              className="mt-10" 
-              logginedUserId={userState?.userInfo?._id} 
+              className="mt-10"
+              logginedUserId={userState?.userInfo?._id}
               postSlug={slug}
             />
           </article>
@@ -87,9 +92,9 @@ const BlogPage = () => {
               tags={data?.tags}
               className="lg:mt-0"
             />
-         </div>
-      </section>
-      )} 
+          </div>
+        </section>
+      )}
     </MainLayout>
   );
 };

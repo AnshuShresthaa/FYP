@@ -7,6 +7,8 @@ import GoogleImage from '../assets/Google.png';
 import AppleImage from '../assets/Apple.png';
 import Blog1Image from  '../assets/Blog1.png';
 import PostProfileImage from '../assets/PostProfile.png';
+import JournalErrorImage from '../assets/JournalError.png';
+import MoodTrackerImage from '../assets/MoodTracker.jpg';
 
 const images = {
     Logo,
@@ -18,6 +20,8 @@ const images = {
     AppleImage,
     Blog1Image,
     PostProfileImage,
+    JournalErrorImage,
+    MoodTrackerImage,
 };
 
 export default images;

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -39,7 +39,11 @@ const ProfilePage = () => {
       toast.success("Profile is updated");
     },
     onError: (error) => {
-      toast.error(error.message);
+      if (error.response?.data?.message) {
+        toast.error(error.response.data.message);
+      } else {
+        toast.error("An error occurred while updating profile. Please try again later.");
+      }
       console.log(error);
     },
   });
@@ -78,6 +82,7 @@ const ProfilePage = () => {
     <MainLayout>
       <section className="container mx-auto px-5 py-10">
         <div className="w-full max-w-sm mx-auto">
+          <h1 className="text-3xl font-semibold mb-8 text-center">Edit profile</h1>
           <ProfilePicture avatar={profileData?.avatar} />
           <form onSubmit={handleSubmit(submitHandler)}>
             <div className="flex flex-col mb-6 mt-8 w-full">
