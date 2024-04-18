@@ -89,6 +89,7 @@ export const updateProfilePicture = async ({ token, formData }) => {
   }
 };
 
+
 export const getAllUsers = async (
   token,
   searchKeyword = "",
@@ -96,6 +97,7 @@ export const getAllUsers = async (
   limit = 10
 ) => {
   try {
+    console.log(token)
     const config = {
       headers: {
         Authorization: `Bearer ${token}`,
