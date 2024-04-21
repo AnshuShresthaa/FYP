@@ -16,7 +16,7 @@ export const getAllPosts = async (searchKeyword = "", page = 1, limit = 10) => {
 export const getSinglePost = async ({ slug }) => {
   try {
     const { data } = await axios.get(`/api/posts/${slug}`);
-   
+    
     return data;
   } catch (error) {
     if (error.response && error.response.data.message)

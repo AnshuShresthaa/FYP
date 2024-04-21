@@ -91,7 +91,7 @@ const Admin = () => {
       {/* Total counts */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {/* Total Users */}
-        <div className="bg-gray-100 rounded-md shadow-md p-4 flex items-center">
+        <div className="bg-gray-200 rounded-md shadow-md p-4 flex items-center">
           <div className="bg-purple-500 rounded-full p-3">
             <HiOutlineUser className="text-white" size={24} />
           </div>
@@ -101,7 +101,7 @@ const Admin = () => {
           </div>
         </div>
         {/* Total Posts */}
-        <div className="bg-gray-100 rounded-md shadow-md p-4 flex items-center">
+        <div className="bg-gray-200 rounded-md shadow-md p-4 flex items-center">
           <div className="bg-green-500 rounded-full p-3">
             <HiDocumentText className="text-white" size={24} />
           </div>
@@ -111,7 +111,7 @@ const Admin = () => {
           </div>
         </div>
         {/* Total Comments */}
-        <div className="bg-gray-100 rounded-md shadow-md p-4 flex items-center">
+        <div className="bg-gray-200 rounded-md shadow-md p-4 flex items-center">
           <div className="bg-blue-400 rounded-full p-3">
             <HiChatAlt2 className="text-white" size={24} />
           </div>

@@ -47,7 +47,7 @@ const Users = () => {
               </div>
             </div>
           </td>
-          <td className="px-12 py-12 text-sm bg-white border-b border-gray-200">
+          <td className="px-10 py-10 text-sm bg-white border-b border-gray-200">
             <p className="text-gray-900 whitespace-no-wrap">{user.email}</p>
           </td>
         </tr>

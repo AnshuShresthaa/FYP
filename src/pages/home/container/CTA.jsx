@@ -26,16 +26,6 @@ const CTA = () => {
             <h2 className="text-white font-roboto font-bold text-3xl md:text-4xl md:leading-normal lg:text-left">
               Your path to mental wellness starts here; let's navigate it together.
             </h2>
-            <div className="w-full max-w-[494px] mt-12 space-y-3 mx-auto md:space-y-0 md:flex md:items-center md:space-x-2 lg:mx-0">
-              <input
-                type="text"
-                className="px-4 py-3 rounded-lg w-full placeholder:text-dark-light"
-                placeholder="Your Email"
-              />
-              <button className="px-4 py-3 rounded-lg w-full bg-primary text-white font-bold md:w-fit md:whitespace-nowrap">
-                Get started
-              </button>
-            </div>
             <p className="text-dark-light text-sm leading-7 mt-6 md:text-base lg:text-left">
               <span className="font-bold italic text-[#B3BAC5] md:not-italic md:font-normal md:text-dark-light">
                 Explore a wealth of insights, expert guidance, and empowering resources to nurture your mental health.

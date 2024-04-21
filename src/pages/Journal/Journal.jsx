@@ -11,13 +11,7 @@ import cn from "../../utils/cn";
 import { GrFormNext, GrFormPrevious } from 'react-icons/gr';
 import { images } from "../../constants";
 import ConfirmationModal from "../../utils/ConfirmationModal";
-import {
-  createPost,
-  getUserJournalEntries,
-  updateJournalEntry,
-  deleteJournalEntry,
-  getAllJournalEntries
-} from "../../services/index/journal"; 
+import { createPost, getUserJournalEntries, updateJournalEntry, deleteJournalEntry, getAllJournalEntries } from "../../services/index/journal"; 
 
 const Journal = () => {
   const [entry, setEntry] = useState({ title: '', content: '', tags: '' });
@@ -102,9 +96,7 @@ const Journal = () => {
 
   // Function to handle deleting an entry
   const handleDelete = async (id) => {
-    // Show the delete confirmation modal
     setShowDeleteModal(true);
-    // Set the entry ID to delete
     setEntryToDelete(id);
   };
 
@@ -112,25 +104,20 @@ const Journal = () => {
   const handleConfirmDelete = async () => {
     try {
       await deleteJournalEntry({ token: userState.userInfo.token, id: entryToDelete });
-      // Remove the deleted entry from the UI
       setJournalEntries(prevEntries => prevEntries.filter(entry => entry._id !== entryToDelete));
       toast.success("Post deleted successfully");
     } catch (error) {
       toast.error("Error deleting entry");
       console.error("Error deleting entry:", error);
     } finally {
-      // Hide the delete confirmation modal
       setShowDeleteModal(false);
-      // Reset the entry ID to delete
       setEntryToDelete(null);
     }
   };
 
   // Function to handle cancelling the delete action
   const handleCancelDelete = () => {
-    // Hide the delete confirmation modal
     setShowDeleteModal(false);
-    // Reset the entry ID to delete
     setEntryToDelete(null);
   };
 
@@ -174,22 +161,22 @@ const Journal = () => {
       <div className="flex gap-4 sm:divide-x justify-center sm:w-1/3 h-screen sm:flex-row flex-col mt-24">
         <div className="w-96 h-96">
           <div className="flex justify-between items-center">
-            <h1 className="select-none font-semibold">
+            <h1 className="select-none font-semibold text-gray-800">
               {months[today.month()]}, {today.year()}
             </h1>
             <div className="flex gap-4 items-center">
               <GrFormPrevious
-                className="w-5 h-5 cursor-pointer hover:scale-105 transition-all"
+                className="w-5 h-5 cursor-pointer hover:scale-105 transition-all text-gray-600"
                 onClick={() => setToday(today.subtract(1, 'month'))}
               />
               <h1
-                className="cursor-pointer hover:scale-105 transition-all"
+                className="cursor-pointer hover:scale-105 transition-all text-gray-600"
                 onClick={() => setToday(currentDate)}
               >
                 Today
               </h1>
               <GrFormNext
-                className="w-5 h-5 cursor-pointer hover:scale-105 transition-all"
+                className="w-5 h-5 cursor-pointer hover:scale-105 transition-all text-gray-600"
                 onClick={() => setToday(today.add(1, 'month'))}
               />
             </div>
@@ -241,7 +228,7 @@ const Journal = () => {
               className="mb-4 max-w-xs max-h-xs lg:max-w-xl lg:max-h-xl"
               alt="Journal Error"
             />
-            <h2 className="text-3xl font-semibold mb-4">You are not logged in!</h2>
+            <h2 className="text-3xl font-semibold mb-4 text-gray-800">You are not logged in!</h2>
             <p>Please <a href="/login" className="text-blue-500">login</a> to access the journal feature.</p>
           </div>
         </div>
@@ -252,14 +239,14 @@ const Journal = () => {
 
   return (
     <MainLayout>
-      <div className="flex gap-4 items-start py-8 pr- pl-2 max-md:pr-2 max-md:flex-row">
+      <div className="flex gap-4 items-start py-8 pr- pl-2 max-md:pr-2 max-md:flex-row bg-purple-100">
         <Calendar onDateClick={setSelectDate} />
         <div className="flex flex-col w-6/12 max-md:ml-0 max-md:w-full">
-          {/* Add the Search component */}
+          {/* Search component */}
           <Search className="mb-8" onSearchKeyword={handleSearchKeyword} />
           {/* Form for adding new entry or editing existing entry */}
-          <div className="border rounded-lg p-6 bg-gray-100">
-            <div className="text-xl font-semibold mb-4">
+          <div className="border rounded-lg p-6 bg-white">
+            <div className="text-xl font-semibold mb-4 text-gray-800">
               {selectDate.format("dddd, MMMM D, YYYY")}
             </div>
             <div className="mb-2"> 
@@ -267,7 +254,7 @@ const Journal = () => {
                 type="text"
                 value={entry.title}
                 onChange={(e) => handleEntryChange('title', e.target.value)}
-                className="py-2 text-xl text-black bg-white placeholder-font-style mb-2 outline-none w-full border rounded-lg p-4" 
+                className="py-2 text-xl text-black placeholder-font-style mb-2 outline-none w-full border rounded-lg p-4" 
                 placeholder="Add a title"
               />
             </div>
@@ -275,7 +262,7 @@ const Journal = () => {
               <textarea
                 value={entry.content}
                 onChange={(e) => handleEntryChange('content', e.target.value)}
-                className="py-2 text-lg text-black bg-white placeholder-font-style resize-none outline-none w-full border rounded-lg p-4" 
+                className="py-2 text-lg text-black placeholder-font-style resize-none outline-none w-full border rounded-lg p-4" 
                 placeholder="Write something...."
                 rows="6"
               />
@@ -285,16 +272,16 @@ const Journal = () => {
                 type="text"
                 value={entry.tags}
                 onChange={(e) => handleEntryChange('tags', e.target.value)}
-                className="py-2 text-xl text-black bg-white mr-2 placeholder-font-style outline-none w-full border rounded-lg p-4" 
+                className="py-2 text-xl text-black mr-2 placeholder-font-style outline-none w-full border rounded-lg p-4" 
                 placeholder="Tags"
               />
             </div>
             <div className="flex justify-between items-center mb-4">
               <span className="text-xl font-semibold text-gray-600">Word Count: {wordCount}/500</span>
               <div className="flex gap-4">
-                {/* Add the Cancel button */}
+                {/* Cancel button */}
                 <button
-                  className="px-4 py-2 text-xl text-white bg-gray-500 rounded-md outline-none mt-4"
+                  className="px-4 py-2 text-xl text-white bg-gray-500 rounded-md outline-none mt-4 hover:bg-gray-600 transition-colors"
                   aria-label="Cancel"
                   onClick={() => {
                     setEntry({ title: '', content: '', tags: '' });
@@ -304,9 +291,9 @@ const Journal = () => {
                 >
                   Cancel
                 </button>
-                {/* Add the Save/Update button */}
+                {/* Save/Update button */}
                 <button
-                  className="px-4 py-2 text-xl text-white bg-green-600 rounded-md outline-none mt-4"
+                  className="px-4 py-2 text-xl text-white bg-green-600 rounded-md outline-none mt-4 hover:bg-green-700 transition-colors"
                   aria-label="Submit"
                   onClick={editingEntry ? handleUpdateEntry : handleAddEntry}
                 >
@@ -318,9 +305,9 @@ const Journal = () => {
 
           {/* Display existing journal entries */}
           <div className="mt-16">
-            <h2 className="text-2xl font-semibold mb-4 text-center">Journal Entries</h2>
+            <h2 className="text-2xl font-semibold mb-4 text-center text-gray-800">Journal Entries</h2>
             {filteredEntries.map((entry) => (
-              <div key={entry._id} className="border p-4 rounded-md mb-4 bg-gray-100">
+              <div key={entry._id} className="border p-4 rounded-md mb-4 bg-white">
 
                 <p className="text-center text-lg mb-4 mt-2">
                   <strong>{dayjs(entry.date).format("MMMM D, YYYY")}</strong>
@@ -330,13 +317,13 @@ const Journal = () => {
                 <p><strong>Tags:</strong> {entry.tags}</p>
                 <div className="mt-2 flex justify-end">
                   <button
-                    className="px-3 py-1 bg-primary text-white rounded-md mr-2"
+                    className="px-3 py-1 bg-primary text-white rounded-md mr-2 hover:bg-primary-dark transition-colors"
                     onClick={() => handleEdit(entry)}
                   >
                     <AiOutlineEdit />
                   </button>
                   <button
-                    className="px-3 py-1 bg-red-500 text-white rounded-md"
+                    className="px-3 py-1 bg-red-500 text-white rounded-md hover:bg-red-600 transition-colors"
                     onClick={() => handleDelete(entry._id)}
                   >
                     <AiOutlineDelete />

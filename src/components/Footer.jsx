@@ -51,18 +51,6 @@ const Footer = () => {
           </div>
         </div>
         
-        <div className="md:col-start-7 md:col-span-2 lg:col-start-9 lg:col-span-2 flex flex-col items-center justify-center mb-5 mt-5">
-          <p className="font-bold text-dark-light text-center mb-2">
-            Follow Us
-          </p>
-          <div className="flex items-center space-x-4 text-gray-300">
-            <AiOutlineTwitter className="w-6 h-auto" />
-            <AiFillYoutube className="w-6 h-auto" />
-            <AiFillInstagram className="w-6 h-auto" />
-            <FaFacebook className="w-6 h-auto" />
-            <BsTelegram className="w-6 h-auto" />
-          </div>
-        </div>
 
         <div className="md:col-span-12 lg:col-span-10 flex justify-center items-center flex-col">
           <p className="font-bold text-dark-light text-center mt-4">

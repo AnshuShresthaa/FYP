@@ -21,7 +21,7 @@ const BlogListPage = () => {
   const searchKeyword = searchParamsValue?.search || "";
 
   const { data, isLoading, isError, isFetching, refetch } = useQuery({
-    queryFn: () => getAllPosts(searchKeyword, currentPage, 6),
+    queryFn: () => getAllPosts(searchKeyword, currentPage, 9),
     queryKey: ["posts"],
     onError: (error) => {
       toast.error(error.message);
